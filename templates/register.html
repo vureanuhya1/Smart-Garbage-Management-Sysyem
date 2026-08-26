@@ -1,0 +1,500 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Register | SmartClean</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/common.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/register.css') }}">
+
+</head>
+
+
+<body>
+{% if error %}
+    <div class="error-message">
+        {{ error }}
+    </div>
+{% endif %}
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<header class="navbar">
+
+    <a href="/" class="logo">
+
+        <div class="logo-icon">
+            ♻
+        </div>
+
+        <div class="logo-text">
+
+            <h2>SmartClean</h2>
+
+            <p>
+                Smart Garbage Management
+            </p>
+
+        </div>
+
+    </a>
+
+
+    <nav>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/">
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a href="/report-issue">
+                    Report Issue
+                </a>
+            </li>
+
+            <li>
+                <a href="/track">
+                    Track Complaint
+                </a>
+            </li>
+
+            <li>
+                <a href="/#about">
+                    About
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <div class="nav-buttons">
+
+        <a href="/login"
+           class="btn-login">
+
+            Login
+
+        </a>
+
+        <a href="/register"
+           class="btn-register">
+
+            Register
+
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================
+     REGISTER PAGE
+========================= -->
+
+<main class="register-page">
+
+
+    <div class="register-orb orb-one"></div>
+
+    <div class="register-orb orb-two"></div>
+
+
+    <section class="register-card">
+
+
+        <!-- LEFT SIDE -->
+
+        <div class="register-info">
+
+            <span class="register-badge">
+                CITIZEN REGISTRATION
+            </span>
+
+            <h1>
+                Join SmartClean 🌱
+            </h1>
+
+            <p>
+                Create your citizen account and become
+                part of a cleaner, smarter community.
+            </p>
+
+
+            <div class="register-points">
+
+                <div class="register-point">
+
+                    <span>📍</span>
+
+                    <div>
+                        <strong>
+                            Report Local Issues
+                        </strong>
+
+                        <small>
+                            Report garbage problems
+                            in your neighborhood.
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="register-point">
+
+                    <span>📋</span>
+
+                    <div>
+                        <strong>
+                            Track Every Complaint
+                        </strong>
+
+                        <small>
+                            Follow your complaint from
+                            submission to resolution.
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="register-point">
+
+                    <span>♻️</span>
+
+                    <div>
+                        <strong>
+                            Make an Impact
+                        </strong>
+
+                        <small>
+                            Help create a cleaner
+                            and healthier environment.
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- RIGHT SIDE -->
+
+        <div class="register-form-area">
+
+
+            <div class="register-form-header">
+
+                <div class="register-icon">
+                    👤
+                </div>
+
+                <div>
+
+                    <h2>
+                        Create Account
+                    </h2>
+
+                    <p>
+                        Register as a citizen
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form
+                action="/register"
+                method="POST">
+
+
+                <!-- FULL NAME -->
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your full name"
+                        required>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required>
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        Mobile Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Enter your mobile number"
+                        pattern="[0-9]{10}"
+                        maxlength="10"
+                        required>
+
+                </div>
+
+
+                <!-- LOCATION -->
+
+                <div class="form-group">
+
+                    <label for="location">
+                        Location / Area
+                    </label>
+
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        placeholder="Enter your area"
+                        required>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="password-box">
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Create a password"
+                            required>
+
+                        <button
+                            type="button"
+                            onclick="togglePassword('password', this)">
+                            👁
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CONFIRM PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="confirm_password">
+                        Confirm Password
+                    </label>
+
+                    <div class="password-box">
+
+                        <input
+                            type="password"
+                            id="confirm_password"
+                            name="confirm_password"
+                            placeholder="Confirm your password"
+                            required>
+
+                        <button
+                            type="button"
+                            onclick="togglePassword('confirm_password', this)">
+                            👁
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TERMS -->
+
+                <label class="terms">
+
+                    <input
+                        type="checkbox"
+                        required>
+
+                    <span>
+                        I agree to the
+                        <a href="#">
+                            Terms & Conditions
+                        </a>
+                    </span>
+
+                </label>
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="register-submit">
+
+                    Create Citizen Account
+
+                    <span>→</span>
+
+                </button>
+
+            </form>
+
+
+            <div class="already-account">
+
+                Already have an account?
+
+                <a href="/citizen-login">
+                    Login here
+                </a>
+
+            </div>
+
+
+            <a href="/login"
+               class="back-login">
+
+                ← Back to account selection
+
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="footer">
+
+    <div>
+
+        <strong>
+            ♻ SmartClean
+        </strong>
+
+        <p>
+            Smart Garbage Management System
+        </p>
+
+    </div>
+
+    <div>
+        © 2026 SmartClean · Team 4
+    </div>
+
+</footer>
+
+
+
+<script>
+
+function togglePassword(id, button) {
+
+    const password =
+        document.getElementById(id);
+
+    if (password.type === "password") {
+
+        password.type = "text";
+
+        button.textContent = "🙈";
+
+    } else {
+
+        password.type = "password";
+
+        button.textContent = "👁";
+
+    }
+
+}
+
+
+document.querySelector("form")
+.addEventListener("submit", function(event) {
+
+    const password =
+        document.getElementById("password").value;
+
+    const confirmPassword =
+        document.getElementById("confirm_password").value;
+
+    if (password !== confirmPassword) {
+
+        event.preventDefault();
+
+        alert("Passwords do not match.");
+
+    }
+
+});
+
+</script>
+
+
+</body>
+
+</html>
+
