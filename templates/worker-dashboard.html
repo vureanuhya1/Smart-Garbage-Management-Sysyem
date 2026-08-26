@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Worker Dashboard | SmartClean</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/common.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/worker-dashboard.css') }}">
+
+</head>
+
+<body>
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<header class="navbar">
+
+    <a href="/" class="logo">
+
+        <div class="logo-icon">
+            ♻
+        </div>
+
+        <div class="logo-text">
+
+            <h2>SmartClean</h2>
+
+            <p>
+                Smart Garbage Management
+            </p>
+
+        </div>
+
+    </a>
+
+
+    <nav>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/worker-dashboard"
+                   class="active">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="/worker-complaints">
+                    Complaints
+                </a>
+            </li>
+
+            <li>
+                <a href="/worker-reports">
+                    Reports
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <div class="worker-nav">
+
+        <button
+            id="profileButton"
+            class="profile-button"
+        >
+
+            <span class="profile-avatar">
+                👷
+            </span>
+
+            <span class="profile-name">
+                Worker
+            </span>
+
+        </button>
+
+
+        <button
+            id="logoutButton"
+            class="logout-button"
+        >
+
+            Logout
+
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
+<main class="dashboard-page">
+
+
+    <div class="dashboard-glow glow-one"></div>
+
+    <div class="dashboard-glow glow-two"></div>
+
+
+
+    <!-- =================================================
+         WELCOME
+    ================================================= -->
+
+    <section class="dashboard-welcome">
+
+        <div>
+
+            <span class="welcome-badge">
+                WORKER PORTAL
+            </span>
+
+            <h1>
+                Welcome back, <span id="workerName">
+                    Worker
+                </span> 👋
+            </h1>
+
+            <p>
+                Here is your daily garbage collection
+                and complaint management overview.
+            </p>
+
+        </div>
+
+
+        <div class="today-card">
+
+            <span>
+                TODAY
+            </span>
+
+            <strong id="todayDate">
+                --
+            </strong>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         STATISTICS
+    ================================================= -->
+
+    <section class="stats-grid">
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon blue">
+                📋
+            </div>
+
+            <div>
+
+                <span>
+                    Assigned Complaints
+                </span>
+
+                <strong id="assignedCount">
+                    12
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon orange">
+                ⏳
+            </div>
+
+            <div>
+
+                <span>
+                    Pending
+                </span>
+
+                <strong id="pendingCount">
+                    5
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon green">
+                ✓
+            </div>
+
+            <div>
+
+                <span>
+                    Completed
+                </span>
+
+                <strong id="completedCount">
+                    7
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon purple">
+                ⭐
+            </div>
+
+            <div>
+
+                <span>
+                    Performance
+                </span>
+
+                <strong>
+                    92%
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         MAIN GRID
+    ================================================= -->
+
+    <section class="dashboard-grid">
+
+
+        <!-- =============================================
+             ASSIGNED TASKS
+        ============================================== -->
+
+        <div class="dashboard-card tasks-card">
+
+            <div class="card-heading">
+
+                <div>
+
+                    <span>
+                        TODAY'S WORK
+                    </span>
+
+                    <h2>
+                        Assigned Complaints
+                    </h2>
+
+                </div>
+
+                <a href="/worker-complaints">
+                    View All →
+                </a>
+
+            </div>
+
+
+            <div
+                id="taskList"
+                class="task-list"
+            ></div>
+
+        </div>
+
+
+
+        <!-- =============================================
+             PERFORMANCE
+        ============================================== -->
+
+        <div class="dashboard-card performance-card">
+
+            <div class="card-heading">
+
+                <div>
+
+                    <span>
+                        PERFORMANCE
+                    </span>
+
+                    <h2>
+                        Monthly Overview
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="performance-circle">
+
+                <div>
+
+                    <strong>
+                        92%
+                    </strong>
+
+                    <span>
+                        Efficiency
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="performance-stats">
+
+                <div>
+
+                    <strong>
+                        48
+                    </strong>
+
+                    <span>
+                        Completed
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <strong>
+                        52
+                    </strong>
+
+                    <span>
+                        Assigned
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <strong>
+                        4.8
+                    </strong>
+
+                    <span>
+                        Rating
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         QUICK ACTIONS
+    ================================================= -->
+
+    <section class="quick-section">
+
+        <div class="section-title">
+
+            <span>
+                SHORTCUTS
+            </span>
+
+            <h2>
+                Quick Actions
+            </h2>
+
+        </div>
+
+
+        <div class="quick-grid">
+
+
+            <a
+                href="/worker-complaints"
+                class="quick-card"
+            >
+
+                <div>
+                    📋
+                </div>
+
+                <strong>
+                    View Complaints
+                </strong>
+
+                <span>
+                    Manage assigned complaints
+                </span>
+
+            </a>
+
+
+            <a
+                href="/worker-reports"
+                class="quick-card"
+            >
+
+                <div>
+                    📊
+                </div>
+
+                <strong>
+                    View Reports
+                </strong>
+
+                <span>
+                    Check collection reports
+                </span>
+
+            </a>
+
+
+            <button
+                id="profileQuickButton"
+                class="quick-card"
+            >
+
+                <div>
+                    👤
+                </div>
+
+                <strong>
+                    My Profile
+                </strong>
+
+                <span>
+                    View worker information
+                </span>
+
+            </button>
+
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<!-- =====================================================
+     PROFILE MODAL
+===================================================== -->
+
+<div
+    id="profileModal"
+    class="modal"
+    hidden
+>
+
+    <div class="modal-overlay"></div>
+
+
+    <div class="profile-modal">
+
+        <button
+            id="closeProfile"
+            class="close-modal"
+        >
+            ×
+        </button>
+
+
+        <div class="large-avatar">
+            👷
+        </div>
+
+
+        <span class="modal-label">
+            WORKER PROFILE
+        </span>
+
+
+        <h2 id="profileName">
+            Worker
+        </h2>
+
+
+        <div class="profile-details">
+
+            <div>
+                <span>
+                    Worker ID
+                </span>
+
+                <strong id="profileId">
+                    WRK-1001
+                </strong>
+            </div>
+
+
+            <div>
+                <span>
+                    Department
+                </span>
+
+                <strong>
+                    Waste Management
+                </strong>
+            </div>
+
+
+            <div>
+                <span>
+                    Assigned Ward
+                </span>
+
+                <strong>
+                    Ward 3
+                </strong>
+            </div>
+
+
+            <div>
+                <span>
+                    Status
+                </span>
+
+                <strong class="online-status">
+                    ● Active
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <div>
+
+        <strong>
+            ♻ SmartClean
+        </strong>
+
+        <p>
+            Smart Garbage Management System
+        </p>
+
+    </div>
+
+
+    <div>
+        © 2026 SmartClean · Team 4
+    </div>
+
+</footer>
+
+
+
+<script
+    src="{{ url_for('static', filename='js/worker-dashboard.js') }}">
+</script>
+
+</body>
+
+</html>
