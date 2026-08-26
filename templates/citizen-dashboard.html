@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Citizen Dashboard | SmartClean</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/common.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/citizen-dashboard.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+        NAVBAR
+========================= -->
+
+<header class="navbar">
+
+    <a href="/" class="logo">
+
+        <div class="logo-icon">
+            ♻
+        </div>
+
+        <div class="logo-text">
+
+            <h2>SmartClean</h2>
+
+            <p>
+                Smart Garbage Management
+            </p>
+
+        </div>
+
+    </a>
+
+
+    <nav>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/">
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a href="/report-issue">
+                    Report Issue
+                </a>
+            </li>
+
+            <li>
+                <a href="/track">
+                    Track Complaint
+                </a>
+            </li>
+
+            <li>
+                <a href="/#about">
+                    About
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <div class="nav-buttons">
+
+        <a href="/citizen-dashboard"
+           class="btn-login dashboard-btn">
+            Dashboard
+        </a>
+
+        <a href="/logout"
+           class="btn-register">
+            Logout
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================
+        DASHBOARD
+========================= -->
+
+<main class="citizen-dashboard">
+
+
+    <!-- Background decoration -->
+
+    <div class="dashboard-circle circle-one"></div>
+
+    <div class="dashboard-circle circle-two"></div>
+
+
+    <div class="dashboard-container">
+
+
+        <!-- =========================
+             WELCOME
+        ========================= -->
+
+        <section class="welcome-section">
+
+            <div>
+
+                <span class="welcome-badge">
+                    🌱 CITIZEN PORTAL
+                </span>
+
+                <h1>
+                    Welcome back<span>! 👋</span>
+                </h1>
+
+                <p>
+                    Help keep your community clean.
+                    Report garbage issues and track
+                    your complaints easily.
+                </p>
+
+            </div>
+
+
+            <div class="online-status">
+
+                <span class="status-dot"></span>
+
+                Account Active
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             QUICK ACTIONS
+        ========================= -->
+
+        <section class="quick-actions">
+
+            <a href="/report-issue"
+               class="action-card report-card">
+
+                <div class="action-icon">
+                    🗑️
+                </div>
+
+                <div>
+
+                    <h3>
+                        Report Garbage Issue
+                    </h3>
+
+                    <p>
+                        Report overflowing bins,
+                        uncollected garbage or
+                        waste problems.
+                    </p>
+
+                    <span class="action-link">
+                        Report Now →
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a href="/track"
+               class="action-card track-card">
+
+                <div class="action-icon">
+                    📍
+                </div>
+
+                <div>
+
+                    <h3>
+                        Track Complaint
+                    </h3>
+
+                    <p>
+                        Check the status of your
+                        submitted complaints.
+                    </p>
+
+                    <span class="action-link">
+                        Track Now →
+                    </span>
+
+                </div>
+
+            </a>
+
+        </section>
+
+
+
+        <!-- =========================
+             STATISTICS
+        ========================= -->
+
+        <section class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📋
+                </div>
+
+                <div>
+
+                    <span class="stat-number">
+                        0
+                    </span>
+
+                    <p>
+                        Total Complaints
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon pending">
+                    ⏳
+                </div>
+
+                <div>
+
+                    <span class="stat-number">
+                        0
+                    </span>
+
+                    <p>
+                        Pending
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon progress">
+                    🚛
+                </div>
+
+                <div>
+
+                    <span class="stat-number">
+                        0
+                    </span>
+
+                    <p>
+                        In Progress
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon resolved">
+                    ✅
+                </div>
+
+                <div>
+
+                    <span class="stat-number">
+                        0
+                    </span>
+
+                    <p>
+                        Resolved
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             RECENT COMPLAINTS
+        ========================= -->
+
+        <section class="complaints-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span>
+                        YOUR ACTIVITY
+                    </span>
+
+                    <h2>
+                        Recent Complaints
+                    </h2>
+
+                </div>
+
+                <a href="/track">
+                    View All →
+                </a>
+
+            </div>
+
+
+            <div class="empty-complaints">
+
+                <div class="empty-icon">
+                    🗂️
+                </div>
+
+                <h3>
+                    No complaints yet
+                </h3>
+
+                <p>
+                    You haven't reported any garbage
+                    issues yet.
+                </p>
+
+                <a href="/report-issue"
+                   class="empty-button">
+
+                    Report Your First Issue
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             CLEAN CITY TIP
+        ========================= -->
+
+        <section class="clean-tip">
+
+            <div class="tip-icon">
+                🌍
+            </div>
+
+            <div>
+
+                <span>
+                    CLEAN CITY TIP
+                </span>
+
+                <h3>
+                    Small actions make a big difference.
+                </h3>
+
+                <p>
+                    Dispose waste responsibly and
+                    report overflowing bins before
+                    they become a bigger problem.
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+</main>
+
+
+
+<!-- =========================
+        FOOTER
+========================= -->
+
+<footer class="footer">
+
+    <div>
+
+        <strong>
+            ♻ SmartClean
+        </strong>
+
+        <p>
+            Smart Garbage Management System
+        </p>
+
+    </div>
+
+    <div>
+
+        © 2026 SmartClean · Team 4
+
+    </div>
+
+</footer>
+
+
+</body>
+
+</html>
+
