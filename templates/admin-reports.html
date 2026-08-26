@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Reports | SmartClean</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/common.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/admin-reports.css') }}">
+
+</head>
+
+<body>
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<header class="navbar">
+
+    <a href="/" class="logo">
+
+        <div class="logo-icon">
+            ♻
+        </div>
+
+        <div class="logo-text">
+
+            <h2>SmartClean</h2>
+
+            <p>
+                Smart Garbage Management
+            </p>
+
+        </div>
+
+    </a>
+
+
+    <nav>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/admin-dashboard">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="/admin-complaints">
+                    Complaints
+                </a>
+            </li>
+
+            <li>
+                <a href="/admin-workers">
+                    Workers
+                </a>
+            </li>
+
+            <li>
+                <a href="/admin-reports"
+                   class="active">
+                    Reports
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <div class="admin-nav">
+
+        <div class="admin-profile">
+
+            <span class="admin-avatar-small">
+                🛡️
+            </span>
+
+            <div>
+
+                <strong>
+                    Admin
+                </strong>
+
+                <span>
+                    Administrator
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="admin-logout"
+            onclick="logoutAdmin()">
+
+            Logout
+
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="reports-page">
+
+
+    <div class="report-glow report-glow-one"></div>
+
+    <div class="report-glow report-glow-two"></div>
+
+
+    <!-- HEADER -->
+
+    <section class="reports-header">
+
+        <div>
+
+            <span class="page-badge">
+                ANALYTICS & REPORTING
+            </span>
+
+            <h1>
+                Reports & Analytics
+            </h1>
+
+            <p>
+                Monitor garbage complaints,
+                worker performance and collection
+                activities.
+            </p>
+
+        </div>
+
+
+        <button
+            class="download-btn"
+            onclick="downloadReport()">
+
+            ↓ Download Report
+
+        </button>
+
+    </section>
+
+
+
+    <!-- =========================
+         FILTER
+    ========================= -->
+
+    <section class="report-filter">
+
+        <div>
+
+            <label>
+                Report Period
+            </label>
+
+            <select id="period">
+
+                <option>
+                    This Month
+                </option>
+
+                <option>
+                    Last Month
+                </option>
+
+                <option>
+                    Last 3 Months
+                </option>
+
+                <option>
+                    This Year
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div>
+
+            <label>
+                Category
+            </label>
+
+            <select>
+
+                <option>
+                    All Categories
+                </option>
+
+                <option>
+                    Overflowing Bin
+                </option>
+
+                <option>
+                    Plastic Waste
+                </option>
+
+                <option>
+                    Uncollected Waste
+                </option>
+
+                <option>
+                    Roadside Waste
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <button
+            onclick="generateReport()"
+            class="generate-btn">
+
+            Generate Report
+
+        </button>
+
+    </section>
+
+
+
+    <!-- =========================
+         SUMMARY
+    ========================= -->
+
+    <section class="report-summary">
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon blue">
+                📋
+            </div>
+
+            <div>
+
+                <span>
+                    Total Complaints
+                </span>
+
+                <strong>
+                    1,248
+                </strong>
+
+                <small>
+                    ↑ 12.5% from last month
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon green">
+                ✓
+            </div>
+
+            <div>
+
+                <span>
+                    Resolved Complaints
+                </span>
+
+                <strong>
+                    1,090
+                </strong>
+
+                <small class="positive">
+                    87.3% resolution rate
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon orange">
+                ⏱
+            </div>
+
+            <div>
+
+                <span>
+                    Avg. Resolution Time
+                </span>
+
+                <strong>
+                    2.4 hrs
+                </strong>
+
+                <small>
+                    ↓ 18% improvement
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon purple">
+                👷
+            </div>
+
+            <div>
+
+                <span>
+                    Active Workers
+                </span>
+
+                <strong>
+                    42
+                </strong>
+
+                <small>
+                    34 available today
+                </small>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         CHART AREA
+========================= -->
+
+    <section class="analytics-grid">
+
+
+        <!-- COMPLAINT TREND -->
+
+        <div class="analytics-card large">
+
+            <div class="analytics-heading">
+
+                <div>
+
+                    <span>
+                        COMPLAINT TREND
+                    </span>
+
+                    <h2>
+                        Monthly Complaints
+                    </h2>
+
+                </div>
+
+                <span class="trend-badge">
+                    +12.5%
+                </span>
+
+            </div>
+
+
+            <div class="chart">
+
+                <div class="chart-y">
+
+                    <span>300</span>
+                    <span>250</span>
+                    <span>200</span>
+                    <span>150</span>
+                    <span>100</span>
+                    <span>50</span>
+                    <span>0</span>
+
+                </div>
+
+
+                <div class="bars">
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar"
+                            style="height:45%;">
+                        </div>
+
+                        <span>
+                            Jan
+                        </span>
+
+                    </div>
+
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar"
+                            style="height:55%;">
+                        </div>
+
+                        <span>
+                            Feb
+                        </span>
+
+                    </div>
+
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar"
+                            style="height:48%;">
+                        </div>
+
+                        <span>
+                            Mar
+                        </span>
+
+                    </div>
+
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar"
+                            style="height:68%;">
+                        </div>
+
+                        <span>
+                            Apr
+                        </span>
+
+                    </div>
+
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar"
+                            style="height:60%;">
+                        </div>
+
+                        <span>
+                            May
+                        </span>
+
+                    </div>
+
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar"
+                            style="height:78%;">
+                        </div>
+
+                        <span>
+                            Jun
+                        </span>
+
+                    </div>
+
+
+                    <div class="bar-column">
+
+                        <div
+                            class="bar active-bar"
+                            style="height:88%;">
+                        </div>
+
+                        <span>
+                            Jul
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CATEGORY -->
+
+        <div class="analytics-card">
+
+            <div class="analytics-heading">
+
+                <div>
+
+                    <span>
+                        CATEGORIES
+                    </span>
+
+                    <h2>
+                        Complaint Types
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="category-list">
+
+
+                <div class="category-item">
+
+                    <div class="category-title">
+
+                        <span>
+                            Overflowing Bins
+                        </span>
+
+                        <strong>
+                            38%
+                        </strong>
+
+                    </div>
+
+                    <div class="category-track">
+
+                        <div
+                            style="width:38%;">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="category-item">
+
+                    <div class="category-title">
+
+                        <span>
+                            Uncollected Waste
+                        </span>
+
+                        <strong>
+                            27%
+                        </strong>
+
+                    </div>
+
+                    <div class="category-track">
+
+                        <div
+                            style="width:27%;">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="category-item">
+
+                    <div class="category-title">
+
+                        <span>
+                            Plastic Waste
+                        </span>
+
+                        <strong>
+                            20%
+                        </strong>
+
+                    </div>
+
+                    <div class="category-track">
+
+                        <div
+                            style="width:20%;">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="category-item">
+
+                    <div class="category-title">
+
+                        <span>
+                            Roadside Waste
+                        </span>
+
+                        <strong>
+                            15%
+                        </strong>
+
+                    </div>
+
+                    <div class="category-track">
+
+                        <div
+                            style="width:15%;">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         PERFORMANCE
+    ========================= -->
+
+    <section class="performance-card">
+
+        <div class="analytics-heading">
+
+            <div>
+
+                <span>
+                    WORKER PERFORMANCE
+                </span>
+
+                <h2>
+                    Top Performing Workers
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="performance-table">
+
+            <div class="performance-row header">
+
+                <span>
+                    Worker
+                </span>
+
+                <span>
+                    Completed
+                </span>
+
+                <span>
+                    Avg. Time
+                </span>
+
+                <span>
+                    Rating
+                </span>
+
+            </div>
+
+
+            <div class="performance-row">
+
+                <span class="worker-name">
+                    <b>01</b>
+                    Ravi Kumar
+                </span>
+
+                <span>
+                    86
+                </span>
+
+                <span>
+                    1.8 hrs
+                </span>
+
+                <span class="rating">
+                    ★ 4.9
+                </span>
+
+            </div>
+
+
+            <div class="performance-row">
+
+                <span class="worker-name">
+                    <b>02</b>
+                    Arjun Rao
+                </span>
+
+                <span>
+                    81
+                </span>
+
+                <span>
+                    2.0 hrs
+                </span>
+
+                <span class="rating">
+                    ★ 4.8
+                </span>
+
+            </div>
+
+
+            <div class="performance-row">
+
+                <span class="worker-name">
+                    <b>03</b>
+                    Suresh Kumar
+                </span>
+
+                <span>
+                    76
+                </span>
+
+                <span>
+                    2.2 hrs
+                </span>
+
+                <span class="rating">
+                    ★ 4.7
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="footer">
+
+    <div>
+
+        <strong>
+            ♻ SmartClean
+        </strong>
+
+        <p>
+            Smart Garbage Management System
+        </p>
+
+    </div>
+
+    <div>
+        © 2026 SmartClean · Team 4
+    </div>
+
+</footer>
+
+
+
+<script>
+
+function logoutAdmin() {
+
+    if (
+        confirm(
+            "Are you sure you want to logout?"
+        )
+    ) {
+
+        window.location.href =
+            "/admin-login";
+
+    }
+
+}
+
+
+function generateReport() {
+
+    const button =
+        document.querySelector(
+            ".generate-btn"
+        );
+
+    button.innerHTML =
+        "Generating...";
+
+    setTimeout(function() {
+
+        button.innerHTML =
+            "✓ Report Generated";
+
+        setTimeout(function() {
+
+            button.innerHTML =
+                "Generate Report";
+
+        }, 1500);
+
+    }, 900);
+
+}
+
+
+function downloadReport() {
+
+    alert(
+        "Report download will be connected to the Python backend."
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>

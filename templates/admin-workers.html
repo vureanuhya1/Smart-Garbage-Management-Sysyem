@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Workers | SmartClean</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/common.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/admin-workers.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<header class="navbar">
+
+    <a href="/" class="logo">
+
+        <div class="logo-icon">
+            ♻
+        </div>
+
+        <div class="logo-text">
+
+            <h2>SmartClean</h2>
+
+            <p>
+                Smart Garbage Management
+            </p>
+
+        </div>
+
+    </a>
+
+
+    <nav>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/admin-dashboard">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="/admin-complaints">
+                    Complaints
+                </a>
+            </li>
+
+            <li>
+                <a href="/admin-workers"
+                   class="active">
+                    Workers
+                </a>
+            </li>
+
+            <li>
+                <a href="/admin-reports">
+                    Reports
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <div class="admin-nav">
+
+        <div class="admin-profile">
+
+            <span class="admin-avatar-small">
+                🛡️
+            </span>
+
+            <div>
+
+                <strong>
+                    Admin
+                </strong>
+
+                <span>
+                    Administrator
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="admin-logout"
+            onclick="logoutAdmin()">
+
+            Logout
+
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<main class="workers-page">
+
+
+    <div class="worker-glow glow-one"></div>
+
+    <div class="worker-glow glow-two"></div>
+
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <section class="workers-header">
+
+        <div>
+
+            <span class="page-badge">
+                WORKFORCE MANAGEMENT
+            </span>
+
+            <h1>
+                Manage Workers
+            </h1>
+
+            <p>
+                Monitor workers, availability and
+                assigned garbage collection tasks.
+            </p>
+
+        </div>
+
+
+        <button
+            class="add-worker-btn"
+            onclick="openAddWorker()">
+
+            + Add Worker
+
+        </button>
+
+    </section>
+
+
+
+    <!-- =========================
+         STATISTICS
+    ========================= -->
+
+    <section class="worker-stats">
+
+
+        <div class="worker-stat-card">
+
+            <div class="worker-stat-icon blue">
+                👷
+            </div>
+
+            <div>
+
+                <span>
+                    Total Workers
+                </span>
+
+                <strong>
+                    42
+                </strong>
+
+                <small>
+                    Registered workers
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="worker-stat-card">
+
+            <div class="worker-stat-icon green">
+                🟢
+            </div>
+
+            <div>
+
+                <span>
+                    Available
+                </span>
+
+                <strong>
+                    34
+                </strong>
+
+                <small class="green-text">
+                    Ready for work
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="worker-stat-card">
+
+            <div class="worker-stat-icon orange">
+                🚛
+            </div>
+
+            <div>
+
+                <span>
+                    On Duty
+                </span>
+
+                <strong>
+                    8
+                </strong>
+
+                <small class="orange-text">
+                    Currently working
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="worker-stat-card">
+
+            <div class="worker-stat-icon purple">
+                📋
+            </div>
+
+            <div>
+
+                <span>
+                    Assigned Tasks
+                </span>
+
+                <strong>
+                    72
+                </strong>
+
+                <small>
+                    Active complaints
+                </small>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         SEARCH / FILTER
+    ========================= -->
+
+    <section class="worker-filter">
+
+        <div class="worker-search">
+
+            <span>
+                🔍
+            </span>
+
+            <input
+                type="text"
+                id="workerSearch"
+                placeholder="Search worker name or ID..."
+            >
+
+        </div>
+
+
+        <select id="workerStatus">
+
+            <option value="all">
+                All Workers
+            </option>
+
+            <option value="available">
+                Available
+            </option>
+
+            <option value="onduty">
+                On Duty
+            </option>
+
+        </select>
+
+
+        <button
+            onclick="filterWorkers()"
+            class="search-filter-btn">
+
+            Search
+
+        </button>
+
+    </section>
+
+
+
+    <!-- =========================
+         WORKER CARDS
+    ========================= -->
+
+    <section class="workers-content">
+
+
+        <div class="workers-section-heading">
+
+            <div>
+
+                <span>
+                    TEAM MEMBERS
+                </span>
+
+                <h2>
+                    Field Workers
+                </h2>
+
+            </div>
+
+
+            <span class="worker-count">
+                42 Workers
+            </span>
+
+        </div>
+
+
+        <div class="worker-grid"
+             id="workerGrid">
+
+
+            <!-- WORKER 1 -->
+
+            <div class="worker-card"
+                 data-status="available">
+
+                <div class="worker-card-top">
+
+                    <div class="worker-avatar avatar-one">
+                        RK
+                    </div>
+
+                    <span class="availability available">
+                        Available
+                    </span>
+
+                </div>
+
+
+                <div class="worker-info">
+
+                    <h3>
+                        Ravi Kumar
+                    </h3>
+
+                    <p>
+                        Worker ID: WK-001
+                    </p>
+
+                </div>
+
+
+                <div class="worker-details">
+
+                    <div>
+
+                        <span>
+                            📍 Area
+                        </span>
+
+                        <strong>
+                            MG Road
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            📋 Tasks
+                        </span>
+
+                        <strong>
+                            3 Active
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="worker-progress">
+
+                    <div class="progress-label">
+
+                        <span>
+                            Today's Progress
+                        </span>
+
+                        <strong>
+                            75%
+                        </strong>
+
+                    </div>
+
+                    <div class="progress-bar">
+
+                        <div
+                            style="width:75%;">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="worker-view-btn"
+                    onclick="viewWorker('WK-001')">
+
+                    View Profile →
+
+                </button>
+
+            </div>
+
+
+
+            <!-- WORKER 2 -->
+
+            <div class="worker-card"
+                 data-status="onduty">
+
+                <div class="worker-card-top">
+
+                    <div class="worker-avatar avatar-two">
+                        PS
+                    </div>
+
+                    <span class="availability onduty">
+                        On Duty
+                    </span>
+
+                </div>
+
+
+                <div class="worker-info">
+
+                    <h3>
+                        Priya Sharma
+                    </h3>
+
+                    <p>
+                        Worker ID: WK-002
+                    </p>
+
+                </div>
+
+
+                <div class="worker-details">
+
+                    <div>
+
+                        <span>
+                            📍 Area
+                        </span>
+
+                        <strong>
+                            Lakeview
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            📋 Tasks
+                        </span>
+
+                        <strong>
+                            5 Active
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="worker-progress">
+
+                    <div class="progress-label">
+
+                        <span>
+                            Today's Progress
+                        </span>
+
+                        <strong>
+                            62%
+                        </strong>
+
+                    </div>
+
+                    <div class="progress-bar">
+
+                        <div
+                            style="width:62%;">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="worker-view-btn"
+                    onclick="viewWorker('WK-002')">
+
+                    View Profile →
+
+                </button>
+
+            </div>
+
+
+
+            <!-- WORKER 3 -->
+
+            <div class="worker-card"
+                 data-status="available">
+
+                <div class="worker-card-top">
+
+                    <div class="worker-avatar avatar-three">
+                        AR
+                    </div>
+
+                    <span class="availability available">
+                        Available
+                    </span>
+
+                </div>
+
+
+                <div class="worker-info">
+
+                    <h3>
+                        Arjun Rao
+                    </h3>
+
+                    <p>
+                        Worker ID: WK-003
+                    </p>
+
+                </div>
+
+
+                <div class="worker-details">
+
+                    <div>
+
+                        <span>
+                            📍 Area
+                        </span>
+
+                        <strong>
+                            Green Park
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            📋 Tasks
+                        </span>
+
+                        <strong>
+                            2 Active
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="worker-progress">
+
+                    <div class="progress-label">
+
+                        <span>
+                            Today's Progress
+                        </span>
+
+                        <strong>
+                            88%
+                        </strong>
+
+                    </div>
+
+                    <div class="progress-bar">
+
+                        <div
+                            style="width:88%;">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="worker-view-btn"
+                    onclick="viewWorker('WK-003')">
+
+                    View Profile →
+
+                </button>
+
+            </div>
+
+
+
+            <!-- WORKER 4 -->
+
+            <div class="worker-card"
+                 data-status="available">
+
+                <div class="worker-card-top">
+
+                    <div class="worker-avatar avatar-four">
+                        SK
+                    </div>
+
+                    <span class="availability available">
+                        Available
+                    </span>
+
+                </div>
+
+
+                <div class="worker-info">
+
+                    <h3>
+                        Suresh Kumar
+                    </h3>
+
+                    <p>
+                        Worker ID: WK-004
+                    </p>
+
+                </div>
+
+
+                <div class="worker-details">
+
+                    <div>
+
+                        <span>
+                            📍 Area
+                        </span>
+
+                        <strong>
+                            Gandhi Nagar
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            📋 Tasks
+                        </span>
+
+                        <strong>
+                            4 Active
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="worker-progress">
+
+                    <div class="progress-label">
+
+                        <span>
+                            Today's Progress
+                        </span>
+
+                        <strong>
+                            70%
+                        </strong>
+
+                    </div>
+
+                    <div class="progress-bar">
+
+                        <div
+                            style="width:70%;">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="worker-view-btn"
+                    onclick="viewWorker('WK-004')">
+
+                    View Profile →
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<!-- =========================
+     ADD WORKER MODAL
+========================= -->
+
+<div
+    class="worker-modal"
+    id="workerModal">
+
+    <div class="modal-box">
+
+        <button
+            class="modal-close"
+            onclick="closeAddWorker()">
+
+            ×
+
+        </button>
+
+
+        <span class="modal-badge">
+            NEW TEAM MEMBER
+        </span>
+
+        <h2>
+            Add Worker
+        </h2>
+
+        <p>
+            Register a new field worker.
+        </p>
+
+
+        <form
+            onsubmit="addWorker(event)">
+
+            <input
+                type="text"
+                id="newWorkerName"
+                placeholder="Worker name"
+                required
+            >
+
+            <input
+                type="tel"
+                placeholder="Phone number"
+                required
+            >
+
+            <input
+                type="text"
+                placeholder="Assigned area"
+                required
+            >
+
+            <button
+                type="submit"
+                class="modal-submit">
+
+                Add Worker
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="footer">
+
+    <div>
+
+        <strong>
+            ♻ SmartClean
+        </strong>
+
+        <p>
+            Smart Garbage Management System
+        </p>
+
+    </div>
+
+    <div>
+        © 2026 SmartClean · Team 4
+    </div>
+
+</footer>
+
+
+
+<script>
+
+function logoutAdmin() {
+
+    if (
+        confirm(
+            "Are you sure you want to logout?"
+        )
+    ) {
+
+        window.location.href =
+            "/admin-login";
+
+    }
+
+}
+
+
+function openAddWorker() {
+
+    document
+        .getElementById("workerModal")
+        .classList.add("show");
+
+}
+
+
+function closeAddWorker() {
+
+    document
+        .getElementById("workerModal")
+        .classList.remove("show");
+
+}
+
+
+function addWorker(event) {
+
+    event.preventDefault();
+
+    alert(
+        "Worker registration will be connected to MySQL backend."
+    );
+
+    closeAddWorker();
+
+}
+
+
+function viewWorker(id) {
+
+    alert(
+        "Worker profile: " + id +
+        "\nThis will be connected to the backend later."
+    );
+
+}
+
+
+function filterWorkers() {
+
+    const search =
+        document
+        .getElementById("workerSearch")
+        .value
+        .toLowerCase();
+
+    const status =
+        document
+        .getElementById("workerStatus")
+        .value;
+
+    const cards =
+        document.querySelectorAll(
+            ".worker-card"
+        );
+
+    cards.forEach(function(card) {
+
+        const text =
+            card.textContent.toLowerCase();
+
+        const workerStatus =
+            card.dataset.status;
+
+        const matchesSearch =
+            text.includes(search);
+
+        const matchesStatus =
+            status === "all" ||
+            workerStatus === status;
+
+        if (
+            matchesSearch &&
+            matchesStatus
+        ) {
+
+            card.style.display = "";
+
+        } else {
+
+            card.style.display = "none";
+
+        }
+
+    });
+
+}
+
+</script>
+
+
+</body>
+
+</html>
