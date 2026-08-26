@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Report Issue | SmartClean</title>
+
+    <!-- Common Navbar -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/common.css') }}">
+
+    <!-- Report Issue CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/report-issue.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<header class="navbar">
+
+    <a href="/" class="logo">
+
+        <div class="logo-icon">
+            ♻
+        </div>
+
+        <div class="logo-text">
+
+            <h2>SmartClean</h2>
+
+            <p>Smart Garbage Management</p>
+
+        </div>
+
+    </a>
+
+
+    <nav>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/">
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a href="/report-issue" class="active">
+                    Report Issue
+                </a>
+            </li>
+
+            <li>
+                <a href="/track">
+                    Track Complaint
+                </a>
+            </li>
+
+            <li>
+                <a href="/#about">
+                    About
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <div class="nav-buttons">
+
+        <a href="/login"
+           class="btn-login">
+            Login
+        </a>
+
+        <a href="/register"
+           class="btn-register">
+            Register
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<main class="report-page">
+
+
+    <!-- Background decoration -->
+
+    <div class="report-glow glow-left"></div>
+
+    <div class="report-glow glow-right"></div>
+
+
+    <!-- =================================================
+         PAGE INTRO
+    ================================================= -->
+
+    <section class="report-intro">
+
+        <div class="intro-badge">
+
+            <span>●</span>
+
+            QUICK & EASY REPORTING
+
+        </div>
+
+
+        <h1>
+
+            Report a Garbage Issue
+
+        </h1>
+
+
+        <p>
+
+            Help keep your neighbourhood clean.
+            Tell us about the garbage problem and
+            our team will take care of it.
+
+        </p>
+
+    </section>
+
+
+    <!-- =================================================
+         REPORT FORM + INFORMATION
+    ================================================= -->
+
+    <section class="report-layout">
+
+
+        <!-- =================================================
+             FORM CARD
+        ================================================= -->
+
+        <div class="report-card">
+
+
+            <div class="card-heading">
+
+                <div class="heading-icon">
+                    🗑️
+                </div>
+
+                <div>
+
+                    <h2>
+                        Submit Your Complaint
+                    </h2>
+
+                    <p>
+                        Provide the details below.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form id="reportForm">
+
+
+                <!-- Name -->
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Your Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Category -->
+
+                <div class="form-group">
+
+                    <label for="category">
+                        Garbage Category
+                    </label>
+
+                    <select
+                        id="category"
+                        name="category"
+                        required
+                    >
+
+                        <option value="">
+                            Select an issue
+                        </option>
+
+                        <option value="overflowing">
+                            Overflowing Bin
+                        </option>
+
+                        <option value="uncollected">
+                            Uncollected Waste
+                        </option>
+
+                        <option value="damaged">
+                            Damaged Bin
+                        </option>
+
+                        <option value="illegal">
+                            Illegal Dumping
+                        </option>
+
+                        <option value="other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Location -->
+
+                <div class="form-group">
+
+                    <label for="location">
+                        Location
+                    </label>
+
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        placeholder="Enter garbage location"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Description -->
+
+                <div class="form-group">
+
+                    <label for="description">
+                        Describe the Issue
+                    </label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="5"
+                        placeholder="Describe the garbage problem..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <!-- Photo -->
+
+                <div class="form-group">
+
+                    <label for="photo">
+                        Upload Photo
+                        <span>(Optional)</span>
+                    </label>
+
+                    <div class="upload-box">
+
+                        <div class="upload-icon">
+                            📷
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Upload an image
+                            </strong>
+
+                            <small>
+                                JPG, PNG up to 5 MB
+                            </small>
+
+                        </div>
+
+                        <input
+                            type="file"
+                            id="photo"
+                            name="photo"
+                            accept="image/png,image/jpeg"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- Submit -->
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                >
+
+                    <span>
+                        Submit Complaint
+                    </span>
+
+                    <strong>
+                        →
+                    </strong>
+
+                </button>
+
+
+                <!-- Message -->
+
+                <div
+                    id="formMessage"
+                    class="form-message"
+                ></div>
+
+
+            </form>
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT INFORMATION PANEL
+        ================================================= -->
+
+        <aside class="report-info">
+
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    ⚡
+                </div>
+
+                <h3>
+                    Quick Response
+                </h3>
+
+                <p>
+                    Your complaint will be reviewed
+                    and assigned to the appropriate
+                    municipal worker.
+                </p>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    📍
+                </div>
+
+                <h3>
+                    Accurate Location
+                </h3>
+
+                <p>
+                    Providing the exact location helps
+                    our team resolve the issue faster.
+                </p>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    🔍
+                </div>
+
+                <h3>
+                    Track Your Complaint
+                </h3>
+
+                <p>
+                    After submitting, use your complaint
+                    ID to follow its progress.
+                </p>
+
+                <a href="/track">
+                    Track Complaint →
+                </a>
+
+            </div>
+
+
+            <!-- Process -->
+
+            <div class="process-card">
+
+                <h3>
+                    How it works
+                </h3>
+
+
+                <div class="process-step">
+
+                    <span>1</span>
+
+                    <div>
+
+                        <strong>
+                            Submit
+                        </strong>
+
+                        <small>
+                            Report the issue
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="process-line"></div>
+
+
+                <div class="process-step">
+
+                    <span>2</span>
+
+                    <div>
+
+                        <strong>
+                            Assign
+                        </strong>
+
+                        <small>
+                            Worker receives it
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="process-line"></div>
+
+
+                <div class="process-step">
+
+                    <span>3</span>
+
+                    <div>
+
+                        <strong>
+                            Resolve
+                        </strong>
+
+                        <small>
+                            Issue gets fixed
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </section>
+
+</main>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <div>
+
+        <strong>
+            ♻ SmartClean
+        </strong>
+
+        <p>
+            Smart Garbage Management System
+        </p>
+
+    </div>
+
+
+    <div>
+
+        © 2026 SmartClean · Team 4
+
+    </div>
+
+</footer>
+
+
+<script>
+
+const form =
+    document.getElementById("reportForm");
+
+const message =
+    document.getElementById("formMessage");
+
+
+form.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    message.textContent =
+        "Complaint submitted successfully!";
+
+    message.className =
+        "form-message success";
+
+});
+
+</script>
+
+
+</body>
+
+</html>

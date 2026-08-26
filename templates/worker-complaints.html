@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Worker Complaints | SmartClean</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/common.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/worker-complaints.css') }}">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <a href="/" class="logo">
+
+        <div class="logo-icon">♻</div>
+
+        <div class="logo-text">
+            <h2>SmartClean</h2>
+            <p>Smart Garbage Management</p>
+        </div>
+
+    </a>
+
+    <nav>
+        <ul class="nav-links">
+
+            <li>
+                <a href="/worker-dashboard">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="/worker-complaints" class="active">
+                    Complaints
+                </a>
+            </li>
+
+            <li>
+                <a href="/worker-reports">
+                    Reports
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+
+   <div class="worker-nav">
+
+    <button class="profile-button" id="profileButton">
+        <span class="profile-avatar">👷</span>
+        <span class="profile-name">Worker</span>
+    </button>
+
+    <button
+        class="logout-button"
+        id="logoutButton"
+        type="button">
+        Logout
+    </button>
+
+</div>
+
+</header>
+
+
+<main class="complaints-page">
+
+    <div class="complaints-glow glow-one"></div>
+    <div class="complaints-glow glow-two"></div>
+
+
+    <!-- PAGE HEADER -->
+
+    <section class="complaints-header">
+
+        <div>
+
+            <span class="page-badge">
+                WORKER PORTAL
+            </span>
+
+            <h1>
+                Assigned Complaints
+            </h1>
+
+            <p>
+                Review, update and manage garbage collection
+                complaints assigned to you.
+            </p>
+
+        </div>
+
+
+        <a href="/worker-dashboard"
+           class="back-dashboard">
+            ← Dashboard
+        </a>
+
+    </section>
+
+
+    <!-- FILTER BAR -->
+
+    <section class="filter-card">
+
+        <div class="search-box">
+
+            <span>🔍</span>
+
+            <input
+                type="text"
+                id="searchComplaint"
+                placeholder="Search complaints..."
+            >
+
+        </div>
+
+
+        <select id="statusFilter">
+
+            <option value="all">
+                All Status
+            </option>
+
+            <option value="Pending">
+                Pending
+            </option>
+
+            <option value="In Progress">
+                In Progress
+            </option>
+
+            <option value="Completed">
+                Completed
+            </option>
+
+        </select>
+
+    </section>
+
+
+    <!-- COMPLAINTS -->
+
+    <section
+        id="complaintsList"
+        class="complaints-list">
+    </section>
+
+
+</main>
+
+
+<footer class="footer">
+
+    <div>
+        <strong>♻ SmartClean</strong>
+
+        <p>
+            Smart Garbage Management System
+        </p>
+    </div>
+
+    <div>
+        © 2026 SmartClean · Team 4
+    </div>
+
+</footer>
+
+
+<script>
+
+const complaints = [
+
+    {
+        id: "CW-1042",
+        title: "Overflowing garbage bin",
+        location: "MG Road, near Bus Stop 4",
+        date: "20 Aug 2026",
+        status: "In Progress"
+    },
+
+    {
+        id: "CW-1051",
+        title: "Broken dustbin lid",
+        location: "Lakeview Colony, Gate 2",
+        date: "20 Aug 2026",
+        status: "Pending"
+    },
+
+    {
+        id: "CW-1038",
+        title: "Garbage pile uncollected",
+        location: "2nd Cross Street",
+        date: "19 Aug 2026",
+        status: "Completed"
+    },
+
+    {
+        id: "CW-1057",
+        title: "Waste collection required",
+        location: "Green Park Road",
+        date: "20 Aug 2026",
+        status: "Pending"
+    },
+
+    {
+        id: "CW-1061",
+        title: "Plastic waste accumulation",
+        location: "Market Road",
+        date: "18 Aug 2026",
+        status: "Completed"
+    }
+
+];
+
+
+const complaintsList =
+    document.getElementById("complaintsList");
+
+const searchInput =
+    document.getElementById("searchComplaint");
+
+const statusFilter =
+    document.getElementById("statusFilter");
+
+
+function renderComplaints() {
+
+    const search =
+        searchInput.value.toLowerCase();
+
+    const status =
+        statusFilter.value;
+
+
+    const filtered =
+        complaints.filter(function(complaint) {
+
+            const matchesSearch =
+                complaint.id.toLowerCase().includes(search) ||
+                complaint.title.toLowerCase().includes(search) ||
+                complaint.location.toLowerCase().includes(search);
+
+            const matchesStatus =
+                status === "all" ||
+                complaint.status === status;
+
+            return matchesSearch && matchesStatus;
+
+        });
+
+
+    complaintsList.innerHTML = "";
+
+
+    if (filtered.length === 0) {
+
+        complaintsList.innerHTML = `
+            <div class="empty-state">
+                <div>🔍</div>
+                <h3>No complaints found</h3>
+                <p>
+                    Try changing your search or filter.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    filtered.forEach(function(complaint, index) {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "complaint-card";
+
+        card.style.animationDelay =
+            `${index * 0.08}s`;
+
+
+        let statusClass = "pending";
+
+        if (complaint.status === "Completed") {
+            statusClass = "completed";
+        }
+
+        if (complaint.status === "In Progress") {
+            statusClass = "progress";
+        }
+
+
+        card.innerHTML = `
+
+            <div class="complaint-icon">
+                🗑️
+            </div>
+
+            <div class="complaint-info">
+
+                <span class="complaint-id">
+                    ${complaint.id}
+                </span>
+
+                <h2>
+                    ${complaint.title}
+                </h2>
+
+                <p>
+                    📍 ${complaint.location}
+                </p>
+
+                <small>
+                    📅 Reported: ${complaint.date}
+                </small>
+
+            </div>
+
+            <div class="complaint-right">
+
+                <span class="status ${statusClass}">
+                    ${complaint.status}
+                </span>
+
+                <button
+                    class="update-button"
+                    onclick="updateComplaint('${complaint.id}')">
+                    Update
+                </button>
+
+            </div>
+
+        `;
+
+
+        complaintsList.appendChild(card);
+
+    });
+
+}
+
+
+function updateComplaint(id) {
+
+    const complaint =
+        complaints.find(
+            item => item.id === id
+        );
+
+
+    if (!complaint) {
+        return;
+    }
+
+
+    if (complaint.status === "Pending") {
+
+        complaint.status =
+            "In Progress";
+
+    }
+
+    else if (complaint.status === "In Progress") {
+
+        complaint.status =
+            "Completed";
+
+    }
+
+    else {
+
+        alert(
+            "This complaint is already completed."
+        );
+
+        return;
+
+    }
+
+
+    renderComplaints();
+
+}
+
+
+searchInput.addEventListener(
+    "input",
+    renderComplaints
+);
+
+
+statusFilter.addEventListener(
+    "change",
+    renderComplaints
+);
+
+
+renderComplaints();
+
+
+/* LOGOUT */
+
+document
+    .getElementById("logoutButton")
+    .addEventListener(
+        "click",
+        function() {
+
+            if (
+                confirm(
+                    "Are you sure you want to logout?"
+                )
+            ) {
+
+                window.location.href =
+                    "/worker-login";
+
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+</html>

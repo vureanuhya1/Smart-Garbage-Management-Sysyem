@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Track Complaint | SmartClean</title>
+
+
+    <!-- Common Navbar CSS -->
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/common.css') }}">
+
+
+    <!-- Track Page CSS -->
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/track.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<header class="navbar">
+
+    <a href="/" class="logo">
+
+        <div class="logo-icon">
+            ♻
+        </div>
+
+        <div class="logo-text">
+
+            <h2>SmartClean</h2>
+
+            <p>
+                Smart Garbage Management
+            </p>
+
+        </div>
+
+    </a>
+
+
+    <nav>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/">
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a href="/report-issue">
+                    Report Issue
+                </a>
+            </li>
+
+            <li>
+                <a href="/track" class="active">
+                    Track Complaint
+                </a>
+            </li>
+
+            <li>
+                <a href="/#about">
+                    About
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <div class="nav-buttons">
+
+        <a href="/login"
+           class="btn-login">
+            Login
+        </a>
+
+        <a href="/register"
+           class="btn-register">
+            Register
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     TRACK PAGE
+===================================================== -->
+
+<main class="track-page">
+
+
+    <!-- Decorative background -->
+
+    <div class="track-glow glow-one"></div>
+
+    <div class="track-glow glow-two"></div>
+
+
+    <!-- =================================================
+         INTRO
+    ================================================= -->
+
+    <section class="track-intro">
+
+        <div class="track-badge">
+
+            <span>●</span>
+
+            LIVE COMPLAINT STATUS
+
+        </div>
+
+
+        <h1>
+            Track Your Complaint
+        </h1>
+
+
+        <p>
+
+            Enter your complaint ID and instantly
+            check the current status of your report.
+
+        </p>
+
+    </section>
+
+
+
+    <!-- =================================================
+         SEARCH CARD
+    ================================================= -->
+
+    <section class="track-search-card">
+
+
+        <div class="search-icon">
+            🔎
+        </div>
+
+
+        <div class="search-content">
+
+            <h2>
+                Find Your Complaint
+            </h2>
+
+            <p>
+                Enter the complaint ID you received
+                after submitting your report.
+            </p>
+
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    id="complaintInput"
+                    placeholder="Example: CW-1042"
+                    autocomplete="off"
+                >
+
+
+                <button
+                    type="button"
+                    onclick="trackComplaint()"
+                    class="track-button"
+                >
+
+                    Track
+
+                    <span>→</span>
+
+                </button>
+
+            </div>
+
+
+            <div class="sample-text">
+
+                Try:
+
+                <button onclick="loadSample('CW-1042')">
+                    CW-1042
+                </button>
+
+                <button onclick="loadSample('CW-1038')">
+                    CW-1038
+                </button>
+
+                <button onclick="loadSample('CW-1051')">
+                    CW-1051
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         NOT FOUND MESSAGE
+    ================================================= -->
+
+    <div
+        id="notFound"
+        class="not-found"
+    >
+
+        <span>⚠️</span>
+
+        <div>
+
+            <strong>
+                Complaint Not Found
+            </strong>
+
+            <p>
+                Please check the complaint ID and try again.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         RESULT
+    ================================================= -->
+
+    <section
+        id="result"
+        class="complaint-result"
+    >
+
+
+        <!-- Result Header -->
+
+        <div class="result-header">
+
+
+            <div>
+
+                <span class="complaint-label">
+                    COMPLAINT ID
+                </span>
+
+
+                <h2 id="rId">
+                    CW-1042
+                </h2>
+
+
+                <h3 id="rTitle">
+                    Garbage complaint
+                </h3>
+
+
+                <p id="rMeta">
+                    Ward 3 · Filed 12 Aug 2026
+                </p>
+
+            </div>
+
+
+            <div
+                id="rBadge"
+                class="status-badge"
+            >
+                In Progress
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PROGRESS STEPPER
+        ================================================= -->
+
+        <div
+            id="stepper"
+            class="stepper"
+        ></div>
+
+
+
+        <!-- =================================================
+             DETAILS
+        ================================================= -->
+
+        <div class="complaint-details">
+
+
+            <div class="detail-card">
+
+                <span>
+                    📍 Location
+                </span>
+
+                <strong id="rLocation">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="detail-card">
+
+                <span>
+                    👷 Assigned Worker
+                </span>
+
+                <strong id="rWorker">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="detail-card">
+
+                <span>
+                    🗂️ Category
+                </span>
+
+                <strong id="rCategory">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="detail-card">
+
+                <span>
+                    🕐 Last Updated
+                </span>
+
+                <strong id="rUpdated">
+                    —
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         RECENT COMPLAINTS
+    ================================================= -->
+
+    <section class="recent-section">
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <span>
+                    COMPLAINT HISTORY
+                </span>
+
+                <h2>
+                    Recent Complaints
+                </h2>
+
+            </div>
+
+            <p>
+                Click a complaint to view details
+            </p>
+
+        </div>
+
+
+        <div
+            id="complaintList"
+            class="complaint-list"
+        ></div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         HELP CARD
+    ================================================= -->
+
+    <section class="track-help">
+
+        <div class="help-icon">
+            💚
+        </div>
+
+
+        <div>
+
+            <h3>
+                Need help?
+            </h3>
+
+            <p>
+                If you cannot find your complaint,
+                contact the municipal administration.
+            </p>
+
+        </div>
+
+
+        <a href="/report-issue">
+            Report New Issue →
+        </a>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <div>
+
+        <strong>
+            ♻ SmartClean
+        </strong>
+
+        <p>
+            Smart Garbage Management System
+        </p>
+
+    </div>
+
+
+    <div>
+
+        © 2026 SmartClean · Team 4
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+// =====================================================
+// SAMPLE COMPLAINT DATA
+// =====================================================
+
+const complaints = {
+
+    "CW-1042": {
+
+        title:
+            "Overflowing bin near bus stop",
+
+        ward:
+            "Ward 3",
+
+        filed:
+            "12 Aug 2026",
+
+        status:
+            "In Progress",
+
+        location:
+            "MG Road, near Bus Stop 4",
+
+        worker:
+            "R. Naidu",
+
+        category:
+            "Overflowing Bin",
+
+        updated:
+            "2 hours ago"
+
+    },
+
+
+    "CW-1038": {
+
+        title:
+            "Garbage pile uncollected for 3 days",
+
+        ward:
+            "Ward 1",
+
+        filed:
+            "9 Aug 2026",
+
+        status:
+            "Completed",
+
+        location:
+            "2nd Cross Street",
+
+        worker:
+            "S. Kumar",
+
+        category:
+            "Uncollected Waste",
+
+        updated:
+            "1 day ago"
+
+    },
+
+
+    "CW-1051": {
+
+        title:
+            "Broken dustbin lid attracting stray animals",
+
+        ward:
+            "Ward 5",
+
+        filed:
+            "16 Aug 2026",
+
+        status:
+            "Submitted",
+
+        location:
+            "Lakeview Colony, Gate 2",
+
+        worker:
+            "Not yet assigned",
+
+        category:
+            "Damaged Bin",
+
+        updated:
+            "3 hours ago"
+
+    }
+
+};
+
+
+
+// =====================================================
+// STATUS STAGES
+// =====================================================
+
+const stages = [
+
+    "Submitted",
+
+    "Assigned",
+
+    "In Progress",
+
+    "Completed"
+
+];
+
+
+
+// =====================================================
+// STATUS CLASS
+// =====================================================
+
+function getStatusClass(status) {
+
+    if (status === "Completed") {
+
+        return "completed";
+
+    }
+
+
+    if (status === "Submitted") {
+
+        return "submitted";
+
+    }
+
+
+    return "progress";
+
+}
+
+
+
+// =====================================================
+// RENDER STEPPER
+// =====================================================
+
+function renderStepper(status) {
+
+    const stepper =
+        document.getElementById("stepper");
+
+
+    stepper.innerHTML = "";
+
+
+    const currentIndex =
+        stages.indexOf(status);
+
+
+    stages.forEach(function(stage, index) {
+
+
+        const step =
+            document.createElement("div");
+
+
+        step.className =
+            "step";
+
+
+        if (index < currentIndex) {
+
+            step.classList.add("done");
+
+        }
+
+
+        if (index === currentIndex) {
+
+            step.classList.add("current");
+
+        }
+
+
+        const number =
+            index < currentIndex
+                ? "✓"
+                : index + 1;
+
+
+        step.innerHTML = `
+
+            <div class="step-line"></div>
+
+            <div class="step-circle">
+                ${number}
+            </div>
+
+            <strong>
+                ${stage}
+            </strong>
+
+        `;
+
+
+        stepper.appendChild(step);
+
+    });
+
+}
+
+
+
+// =====================================================
+// SHOW COMPLAINT
+// =====================================================
+
+function showComplaint(id) {
+
+    const data =
+        complaints[id];
+
+
+    const result =
+        document.getElementById("result");
+
+
+    const notFound =
+        document.getElementById("notFound");
+
+
+    if (!data) {
+
+        result.classList.remove("show");
+
+        notFound.classList.add("show");
+
+        return;
+
+    }
+
+
+    notFound.classList.remove("show");
+
+
+    document.getElementById("rId")
+        .textContent = id;
+
+
+    document.getElementById("rTitle")
+        .textContent = data.title;
+
+
+    document.getElementById("rMeta")
+        .textContent =
+        `${data.ward} · Filed ${data.filed}`;
+
+
+    const badge =
+        document.getElementById("rBadge");
+
+
+    badge.textContent =
+        data.status;
+
+
+    badge.className =
+        "status-badge " +
+        getStatusClass(data.status);
+
+
+    document.getElementById("rLocation")
+        .textContent = data.location;
+
+
+    document.getElementById("rWorker")
+        .textContent = data.worker;
+
+
+    document.getElementById("rCategory")
+        .textContent = data.category;
+
+
+    document.getElementById("rUpdated")
+        .textContent = data.updated;
+
+
+    renderStepper(data.status);
+
+
+    result.classList.add("show");
+
+
+    result.scrollIntoView({
+
+        behavior: "smooth",
+
+        block: "center"
+
+    });
+
+}
+
+
+
+// =====================================================
+// TRACK BUTTON
+// =====================================================
+
+function trackComplaint() {
+
+    const input =
+        document.getElementById("complaintInput");
+
+
+    const id =
+        input.value
+            .trim()
+            .toUpperCase();
+
+
+    if (!id) {
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    showComplaint(id);
+
+}
+
+
+
+// =====================================================
+// SAMPLE BUTTON
+// =====================================================
+
+function loadSample(id) {
+
+    document.getElementById(
+        "complaintInput"
+    ).value = id;
+
+
+    showComplaint(id);
+
+}
+
+
+
+// =====================================================
+// ENTER KEY
+// =====================================================
+
+document
+    .getElementById("complaintInput")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                trackComplaint();
+
+            }
+
+        }
+    );
+
+
+
+// =====================================================
+// RECENT COMPLAINT LIST
+// =====================================================
+
+function renderComplaintList() {
+
+    const list =
+        document.getElementById(
+            "complaintList"
+        );
+
+
+    list.innerHTML = "";
+
+
+    Object.entries(complaints)
+        .forEach(function([id, data]) {
+
+
+            const row =
+                document.createElement("div");
+
+
+            row.className =
+                "complaint-row";
+
+
+            row.onclick =
+                function() {
+
+                    document
+                        .getElementById(
+                            "complaintInput"
+                        )
+                        .value = id;
+
+
+                    showComplaint(id);
+
+                };
+
+
+            row.innerHTML = `
+
+                <div class="row-info">
+
+                    <span class="row-id">
+                        ${id}
+                    </span>
+
+                    <h3>
+                        ${data.title}
+                    </h3>
+
+                    <p>
+                        ${data.location}
+                    </p>
+
+                </div>
+
+
+                <div class="
+                    row-status
+                    ${getStatusClass(data.status)}
+                ">
+
+                    ${data.status}
+
+                </div>
+
+            `;
+
+
+            list.appendChild(row);
+
+        });
+
+}
+
+
+
+// =====================================================
+// INITIALIZE
+// =====================================================
+
+renderComplaintList();
+
+</script>
+
+
+</body>
+
+</html>
