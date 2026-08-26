@@ -1,0 +1,738 @@
+
+/* =====================================================
+   SMARTCLEAN — CITIZEN REGISTER
+===================================================== */
+
+.register-page {
+
+    min-height: calc(100vh - 145px);
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 45px 7% 55px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle at 5% 15%,
+            rgba(70,174,222,.11),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 95% 85%,
+            rgba(61,169,105,.12),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #f3fbfe,
+            #eff9f4
+        );
+
+}
+
+
+/* =========================
+   BACKGROUND ORBS
+========================= */
+
+.register-orb {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    filter: blur(4px);
+
+}
+
+
+.orb-one {
+
+    width: 280px;
+    height: 280px;
+
+    top: -130px;
+    right: -100px;
+
+    background:
+        rgba(65,166,214,.10);
+
+    animation:
+        registerFloat 8s ease-in-out infinite;
+
+}
+
+
+.orb-two {
+
+    width: 330px;
+    height: 330px;
+
+    bottom: -180px;
+    left: -130px;
+
+    background:
+        rgba(57,166,104,.09);
+
+    animation:
+        registerFloat 10s ease-in-out infinite reverse;
+
+}
+
+
+@keyframes registerFloat {
+
+    0%,100% {
+        transform: translate(0,0);
+    }
+
+    50% {
+        transform: translate(20px,-25px);
+    }
+
+}
+
+
+/* =========================
+   MAIN CARD
+========================= */
+
+.register-card {
+
+    width: min(100%, 940px);
+
+    display: grid;
+
+    grid-template-columns:
+        .9fr 1.1fr;
+
+    position: relative;
+
+    z-index: 2;
+
+    overflow: hidden;
+
+    background:
+        rgba(255,255,255,.95);
+
+    border: 1px solid #dcebe5;
+
+    border-radius: 25px;
+
+    box-shadow:
+        0 25px 60px
+        rgba(35,93,67,.10);
+
+    animation:
+        registerAppear .7s ease both;
+
+}
+
+
+/* =========================
+   LEFT INFORMATION
+========================= */
+
+.register-info {
+
+    padding: 42px 35px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #eaf7f1,
+            #edf9fc
+        );
+
+}
+
+
+.register-badge {
+
+    width: fit-content;
+
+    padding: 7px 11px;
+
+    border-radius: 20px;
+
+    background: white;
+
+    color: #347c57;
+
+    font-size: 7px;
+
+    font-weight: 850;
+
+    letter-spacing: 1px;
+
+}
+
+
+.register-info h1 {
+
+    margin: 14px 0 9px;
+
+    color: #234938;
+
+    font-size: 28px;
+
+    line-height: 1.2;
+
+}
+
+
+.register-info > p {
+
+    color: #71877c;
+
+    font-size: 9.5px;
+
+    line-height: 1.8;
+
+}
+
+
+/* =========================
+   REGISTER POINTS
+========================= */
+
+.register-points {
+
+    margin-top: 25px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 17px;
+
+}
+
+
+.register-point {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+}
+
+
+.register-point > span {
+
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: white;
+
+    box-shadow:
+        0 5px 15px
+        rgba(35,93,67,.06);
+
+}
+
+
+.register-point strong {
+
+    display: block;
+
+    color: #476556;
+
+    font-size: 8px;
+
+}
+
+
+.register-point small {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #81958b;
+
+    font-size: 7px;
+
+    line-height: 1.4;
+
+}
+
+
+/* =========================
+   FORM AREA
+========================= */
+
+.register-form-area {
+
+    padding: 35px 40px;
+
+}
+
+
+.register-form-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    margin-bottom: 19px;
+
+}
+
+
+.register-icon {
+
+    width: 43px;
+    height: 43px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #e7f5ee;
+
+    font-size: 18px;
+
+}
+
+
+.register-form-header h2 {
+
+    margin: 0;
+
+    color: #2c4b3c;
+
+    font-size: 18px;
+
+}
+
+
+.register-form-header p {
+
+    margin: 3px 0 0;
+
+    color: #8a9a92;
+
+    font-size: 7px;
+
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.form-group {
+
+    margin-bottom: 11px;
+
+}
+
+
+.form-group label {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #587064;
+
+    font-size: 7.5px;
+
+    font-weight: 800;
+
+}
+
+
+.form-group input {
+
+    width: 100%;
+
+    height: 37px;
+
+    padding: 0 11px;
+
+    border: 1px solid #dce8e2;
+
+    border-radius: 8px;
+
+    outline: none;
+
+    background: #fbfdfc;
+
+    color: #40584c;
+
+    font-family: inherit;
+
+    font-size: 8px;
+
+    transition: .25s ease;
+
+}
+
+
+.form-group input:focus {
+
+    border-color: #65a984;
+
+    background: white;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(76,160,112,.08);
+
+}
+
+
+.form-group input::placeholder {
+
+    color: #a7b5ae;
+
+}
+
+
+/* =========================
+   PASSWORD
+========================= */
+
+.password-box {
+
+    position: relative;
+
+}
+
+
+.password-box input {
+
+    padding-right: 40px;
+
+}
+
+
+.password-box button {
+
+    position: absolute;
+
+    right: 5px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 29px;
+    height: 29px;
+
+    border: none;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    opacity: .65;
+
+}
+
+
+/* =========================
+   TERMS
+========================= */
+
+.terms {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin: 12px 0 15px;
+
+    color: #82938b;
+
+    font-size: 7px;
+
+}
+
+
+.terms input {
+
+    accent-color: #3d885c;
+
+}
+
+
+.terms a {
+
+    color: #327b52;
+
+    font-weight: 750;
+
+    text-decoration: none;
+
+}
+
+
+.terms a:hover {
+
+    text-decoration: underline;
+
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+.register-submit {
+
+    width: 100%;
+
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #3d8b5c,
+            #286d47
+        );
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 18px
+        rgba(49,126,79,.18);
+
+    transition: .3s ease;
+
+}
+
+
+.register-submit span {
+
+    font-size: 13px;
+
+    transition: .3s ease;
+
+}
+
+
+.register-submit:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 25px
+        rgba(49,126,79,.25);
+
+}
+
+
+.register-submit:hover span {
+
+    transform: translateX(4px);
+
+}
+
+
+/* =========================
+   ACCOUNT LINKS
+========================= */
+
+.already-account {
+
+    margin-top: 14px;
+
+    text-align: center;
+
+    color: #899991;
+
+    font-size: 7px;
+
+}
+
+
+.already-account a {
+
+    color: #327b52;
+
+    font-weight: 850;
+
+    text-decoration: none;
+
+}
+
+
+.already-account a:hover {
+
+    text-decoration: underline;
+
+}
+
+
+.back-login {
+
+    display: block;
+
+    margin-top: 12px;
+
+    text-align: center;
+
+    color: #7e9188;
+
+    font-size: 6.5px;
+
+    text-decoration: none;
+
+}
+
+
+.back-login:hover {
+
+    color: #347c56;
+
+}
+
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes registerAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(25px)
+            scale(.98);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 800px) {
+
+    .register-page {
+
+        padding: 35px 20px;
+
+    }
+
+
+    .register-card {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .register-info {
+
+        padding: 32px;
+
+    }
+
+
+    .register-form-area {
+
+        padding: 32px;
+
+    }
+
+}
+
+
+@media (max-width: 550px) {
+
+    .register-info,
+    .register-form-area {
+
+        padding: 25px 21px;
+
+    }
+
+}
+.error-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #ffffff;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    max-width: 350px;
+    font-size: 14px;
+}
