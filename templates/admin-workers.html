@@ -50,7 +50,7 @@
     <nav>
 
         <ul class="nav-links">
-
+ <li><a href="/admin-profile">Profile</a></li> 
             <li>
                 <a href="/admin-dashboard">
                     Dashboard
@@ -104,13 +104,14 @@
         </div>
 
 
-        <button
-            class="admin-logout"
-            onclick="logoutAdmin()">
+       <a
+    class="admin-logout"
+    href="{{ url_for('admin_logout') }}"
+    onclick="return confirm('Are you sure you want to logout?')">
 
-            Logout
+    Logout
 
-        </button>
+</a>
 
     </div>
 
@@ -789,25 +790,41 @@
         </p>
 
 
-        <form
-            onsubmit="addWorker(event)">
+        <form action="/admin-workers" method="POST">
 
             <input
                 type="text"
                 id="newWorkerName"
+                name="name"
                 placeholder="Worker name"
                 required
             >
 
             <input
                 type="tel"
+                name="phone"
                 placeholder="Phone number"
                 required
             >
 
             <input
                 type="text"
-                placeholder="Assigned area"
+                name="address"
+                placeholder="Assigned area / address"
+                required
+            >
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Worker email"
+                required
+            >
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Temporary password (min 6, uppercase + number)"
                 required
             >
 
@@ -854,114 +871,14 @@
 
 
 <script>
-
-function logoutAdmin() {
-
-    if (
-        confirm(
-            "Are you sure you want to logout?"
-        )
-    ) {
-
-        window.location.href =
-            "/admin-login";
-
-    }
-
-}
-
-
-function openAddWorker() {
-
-    document
-        .getElementById("workerModal")
-        .classList.add("show");
-
-}
-
-
-function closeAddWorker() {
-
-    document
-        .getElementById("workerModal")
-        .classList.remove("show");
-
-}
-
-
-function addWorker(event) {
-
-    event.preventDefault();
-
-    alert(
-        "Worker registration will be connected to MySQL backend."
-    );
-
-    closeAddWorker();
-
-}
-
-
-function viewWorker(id) {
-
-    alert(
-        "Worker profile: " + id +
-        "\nThis will be connected to the backend later."
-    );
-
-}
-
-
-function filterWorkers() {
-
-    const search =
-        document
-        .getElementById("workerSearch")
-        .value
-        .toLowerCase();
-
-    const status =
-        document
-        .getElementById("workerStatus")
-        .value;
-
-    const cards =
-        document.querySelectorAll(
-            ".worker-card"
-        );
-
-    cards.forEach(function(card) {
-
-        const text =
-            card.textContent.toLowerCase();
-
-        const workerStatus =
-            card.dataset.status;
-
-        const matchesSearch =
-            text.includes(search);
-
-        const matchesStatus =
-            status === "all" ||
-            workerStatus === status;
-
-        if (
-            matchesSearch &&
-            matchesStatus
-        ) {
-
-            card.style.display = "";
-
-        } else {
-
-            card.style.display = "none";
-
-        }
-
-    });
-
-}
-
+let workers=[];
+async function loadWorkers(){const r=await fetch("/api/admin/workers");if(!r.ok)return;workers=await r.json();renderWorkers();}
+function renderWorkers(){const grid=document.getElementById("workerGrid");if(!grid)return;const q=(document.getElementById("workerSearch").value||"").toLowerCase(),st=document.getElementById("workerStatus").value;const rows=workers.filter(w=>(w.display_id+w.name+(w.email||"")+w.phone).toLowerCase().includes(q)&&(st==="all"||w.status===st));grid.innerHTML="";rows.forEach(w=>{const card=document.createElement("div");card.className="worker-card";card.dataset.status=w.status;card.innerHTML=`<div class="worker-card-header"><div class="worker-avatar">${w.name[0].toUpperCase()}</div><div><h3>${w.name}</h3><span>${w.display_id}</span></div></div><div class="worker-card-body"><p>📧 ${w.email||"-"}</p><p>📞 ${w.phone}</p><p>📍 ${w.address||"-"}</p><span class="worker-status-badge">● ${w.status}</span></div><button class="worker-view-btn" onclick="viewWorker('${w.display_id}')">View Profile →</button>`;grid.appendChild(card);});}
+function filterWorkers(){renderWorkers();}
+function openAddWorker(){document.getElementById("workerModal").classList.add("show");}
+function closeAddWorker(){document.getElementById("workerModal").classList.remove("show");}
+function viewWorker(id){const w=workers.find(x=>x.display_id===id);if(w)alert(`${w.display_id}\n${w.name}\n${w.email||"-"}\n${w.phone}\n${w.address||"-"}\nStatus: ${w.status}`);}
+loadWorkers();
 </script>
 
 

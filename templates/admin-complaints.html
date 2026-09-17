@@ -50,7 +50,7 @@
     <nav>
 
         <ul class="nav-links">
-
+ <li><a href="/admin-profile">Profile</a></li> 
             <li>
                 <a href="/admin-dashboard">
                     Dashboard
@@ -104,13 +104,14 @@
         </div>
 
 
-        <button
-            class="admin-logout"
-            onclick="logoutAdmin()">
+       <a
+    class="admin-logout"
+    href="{{ url_for('admin_logout') }}"
+    onclick="return confirm('Are you sure you want to logout?')">
 
-            Logout
+    Logout
 
-        </button>
+</a>
 
     </div>
 
@@ -773,92 +774,160 @@
 
 
 <script>
+let adminComplaints = [];
+let adminWorkers = [];
 
-function logoutAdmin() {
+async function loadAdminComplaints() {
+    try {
+        const [complaintsResponse, workersResponse] = await Promise.all([
+            fetch("/api/admin/complaints"),
+            fetch("/api/admin/workers")
+        ]);
 
-    if (
-        confirm(
-            "Are you sure you want to logout?"
-        )
-    ) {
+        if (!complaintsResponse.ok) throw new Error("Unable to load complaints.");
+        adminComplaints = await complaintsResponse.json();
 
-        window.location.href =
-            "/admin-login";
-
-    }
-
-}
-
-
-function refreshComplaints() {
-
-    const button =
-        document.querySelector(".refresh-btn");
-
-    button.innerHTML =
-        "⟳ Refreshing...";
-
-    setTimeout(function () {
-
-        button.innerHTML =
-            "✓ Updated";
-
-        setTimeout(function () {
-
-            button.innerHTML =
-                "↻ Refresh";
-
-        }, 1200);
-
-    }, 800);
-
-}
-
-
-function viewComplaint(id) {
-
-    alert(
-        "Complaint details for #" + id +
-        " will be connected to the backend."
-    );
-
-}
-
-
-function applyFilters() {
-
-    const search =
-        document
-        .getElementById("searchComplaint")
-        .value
-        .toLowerCase();
-
-    const rows =
-        document.querySelectorAll(
-            "#complaintTable tr"
-        );
-
-    rows.forEach(function(row) {
-
-        const text =
-            row.textContent.toLowerCase();
-
-        if (
-            text.includes(search)
-        ) {
-
-            row.style.display = "";
-
-        } else {
-
-            row.style.display = "none";
-
+        if (workersResponse.ok) {
+            adminWorkers = await workersResponse.json();
         }
 
-    });
-
+        renderAdminComplaints();
+    } catch (error) {
+        console.error(error);
+        const tbody = document.getElementById("complaintTable");
+        if (tbody) {
+            tbody.innerHTML = `<tr><td colspan="8">Unable to load complaint records.</td></tr>`;
+        }
+    }
 }
 
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[ch]));
+}
+
+function renderAdminComplaints() {
+    const tbody = document.getElementById("complaintTable");
+    if (!tbody) return;
+
+    const q = (document.getElementById("searchComplaint").value || "").toLowerCase();
+    const st = document.getElementById("statusFilter").value;
+    const cat = document.getElementById("categoryFilter").value;
+
+    const rows = adminComplaints.filter(c => {
+        const text = `${c.id} ${c.issue_type} ${c.street_number || ""} ${c.citizen_name || ""}`.toLowerCase();
+        const categoryMatch = cat === "all" || (c.issue_type || "").toLowerCase().includes(cat.replace(" Bin","").toLowerCase());
+        return text.includes(q) && (st === "all" || c.status === st) && categoryMatch;
+    });
+
+    tbody.innerHTML = "";
+
+    rows.forEach(c => {
+        const tr = document.createElement("tr");
+        const cls = c.status === "Resolved" ? "completed" :
+                    c.status === "In Progress" ? "progress" :
+                    c.status === "Assigned" ? "progress" : "pending";
+
+        const workerOptions = [
+            `<option value="">Select worker</option>`,
+            ...adminWorkers.map(w =>
+                `<option value="${escapeHtml(w.display_id)}" ${String(w.worker_id) === String(c.worker_id) ? "selected" : ""}>${escapeHtml(w.display_id)} - ${escapeHtml(w.name)}</option>`
+            )
+        ].join("");
+
+        tr.innerHTML = `
+            <td><strong>#${escapeHtml(c.id)}</strong></td>
+            <td>
+                <div class="issue-cell">
+                    <span class="issue-icon">🗑️</span>
+                    <div><strong>${escapeHtml(c.issue_type)}</strong><small>${escapeHtml(c.issue_type)}</small></div>
+                </div>
+            </td>
+            <td>${escapeHtml(c.location || "-")}</td>
+            <td>${escapeHtml(c.citizen_name || "-")}</td>
+            <td>${escapeHtml(c.date || "-")}</td>
+            <td>${escapeHtml(c.worker_name || "Not Assigned")}</td>
+            <td><span class="status ${cls}">${escapeHtml(c.status || "-")}</span></td>
+            <td>
+                <button class="view-btn" onclick="viewComplaint('${escapeHtml(c.id)}')">View</button>
+                <div style="margin-top:8px;display:flex;gap:5px;align-items:center;">
+                    <select id="worker-${escapeHtml(c.id)}" style="max-width:150px;padding:7px;border:1px solid #d6e2da;border-radius:8px;">
+                        ${workerOptions}
+                    </select>
+                    <button class="view-btn" onclick="assignComplaint('${escapeHtml(c.id)}')">Assign</button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    const count = document.querySelector(".record-count");
+    if (count) count.textContent = `${rows.length} Records`;
+}
+
+function viewComplaint(id) {
+    const c = adminComplaints.find(x => x.id === id);
+    if (!c) return;
+
+    alert(
+        `Complaint ${c.id}\n` +
+        `Citizen: ${c.citizen_name || "-"}\n` +
+        `Issue: ${c.issue_type || "-"}\n` +
+        `Location: ${c.location || "-"}\n` +
+        `Status: ${c.status || "-"}\n` +
+        `Worker: ${c.worker_name || "Not Assigned"}\n` +
+        `Description: ${c.description || "-"}`
+    );
+}
+
+async function assignComplaint(id) {
+    const select = document.getElementById(`worker-${id}`);
+    const workerId = select ? select.value : "";
+
+    if (!workerId) {
+        alert("Please select a worker first.");
+        return;
+    }
+
+    const complaint = adminComplaints.find(x => x.id === id);
+    if (!complaint) return;
+
+    if (!confirm(`Assign ${id} to ${workerId}?`)) return;
+
+    try {
+        const response = await fetch(
+            `/api/admin/complaints/${encodeURIComponent(id)}/assign`,
+            {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({worker_id: workerId})
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || "Assignment failed.");
+        }
+
+        alert(data.message || "Complaint assigned successfully.");
+        await loadAdminComplaints();
+    } catch (error) {
+        console.error(error);
+        alert(error.message || "Unable to assign complaint.");
+    }
+}
+
+function applyFilters() {
+    renderAdminComplaints();
+}
+
+function refreshComplaints() {
+    loadAdminComplaints();
+}
+
+loadAdminComplaints();
 </script>
 
 
