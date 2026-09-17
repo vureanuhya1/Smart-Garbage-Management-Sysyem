@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Worker Registration - SmartClean</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/worker-register.css') }}">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+
+        <div class="logo-section">
+
+            <div class="logo">
+                <i class="fa-solid fa-recycle"></i>
+            </div>
+
+            <div class="brand">
+                <h2>SmartClean</h2>
+                <span>Smart Garbage Management</span>
+            </div>
+
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="/">Home</a>
+            <a href="/report-issue">Report Issue</a>
+            <a href="/track">Track Complaint</a>
+            <a href="/#about">About</a>
+
+        </div>
+
+
+        <div class="nav-buttons">
+
+            <a href="/login" class="login-btn">
+                Login
+            </a>
+
+            <a href="/worker-register"
+               class="register-btn">
+                Register
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =====================================================
+         NORMAL REGISTRATION PAGE
+    ====================================================== -->
+
+    {% if not registration_success %}
+
+    <div class="registration-container">
+
+        <!-- Left Section -->
+
+        <div class="left-section">
+
+            <div class="small-title">
+                WORKER REGISTRATION
+            </div>
+
+
+            <h1>
+                Join SmartClean
+                <span>🌱</span>
+            </h1>
+
+
+            <p class="description">
+                Register as a worker and become part of a cleaner,
+                smarter community.
+            </p>
+
+
+            <!-- Feature 1 -->
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    📍
+                </div>
+
+                <div>
+
+                    <h4>
+                        Manage Local Issues
+                    </h4>
+
+                    <p>
+                        Help manage garbage problems
+                        in your assigned area.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Feature 2 -->
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    📋
+                </div>
+
+                <div>
+
+                    <h4>
+                        Handle Complaints
+                    </h4>
+
+                    <p>
+                        View and resolve citizen
+                        complaints efficiently.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Feature 3 -->
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    ♻️
+                </div>
+
+                <div>
+
+                    <h4>
+                        Keep the City Clean
+                    </h4>
+
+                    <p>
+                        Contribute to a cleaner and
+                        healthier environment.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT FORM SECTION
+        ================================================== -->
+
+        <div class="form-section">
+
+            <div class="form-heading">
+
+                <div class="user-icon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+                <div>
+
+                    <h2>
+                        Create Worker Account
+                    </h2>
+
+                    <p>
+                        Register as a SmartClean worker
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Error Message -->
+
+            {% if error %}
+
+            <div class="form-message error">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+            <!-- Registration Form -->
+
+            <form
+                action="/worker-register"
+                method="POST"
+                id="workerRegistrationForm">
+
+
+                <!-- Name -->
+
+                <div class="input-group">
+
+                    <label for="name">
+                        Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter worker name"
+                        required>
+
+                </div>
+
+
+                <!-- Phone -->
+
+                <div class="input-group">
+
+                    <label for="phone">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Enter phone number"
+                        pattern="[0-9]{10}"
+                        maxlength="10"
+                        required>
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="input-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter worker email"
+                        required>
+
+                </div>
+
+
+                <!-- Address -->
+
+                <div class="input-group">
+
+                    <label for="address">
+                        Address
+                    </label>
+
+                    <input
+                        type="text"
+                        id="address"
+                        name="address"
+                        placeholder="Enter worker address"
+                        required>
+
+                </div>
+
+
+                <!-- Password -->
+
+                <div class="input-group password-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        required>
+
+                    <i
+                        class="fa-solid fa-eye toggle-password"
+                        onclick="togglePassword('password', this)">
+                    </i>
+
+                </div>
+
+
+                <!-- Confirm Password -->
+
+                <div class="input-group password-group">
+
+                    <label for="confirmPassword">
+                        Confirm Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Confirm your password"
+                        required>
+
+                    <i
+                        class="fa-solid fa-eye toggle-password"
+                        onclick="togglePassword('confirmPassword', this)">
+                    </i>
+
+                </div>
+
+
+                <!-- Password Message -->
+
+                <div
+                    id="passwordMessage"
+                    class="password-message">
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="input-group">
+
+                    <label for="status">
+                        Status
+                    </label>
+
+                    <select
+                        id="status"
+                        name="status"
+                        required>
+
+                        <option value=""
+                                disabled
+                                selected>
+                            Select worker status
+                        </option>
+
+                        <option value="Available">
+                            Available
+                        </option>
+
+                        <option value="Busy">
+                            Busy
+                        </option>
+
+                        <option value="Unavailable">
+                            Unavailable
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Terms -->
+
+                <div class="terms">
+
+                    <input
+                        type="checkbox"
+                        id="terms"
+                        name="terms"
+                        required>
+
+                    <label for="terms">
+
+                        I agree to the
+
+                        <a href="#"
+                           onclick="return false;">
+                            Terms & Conditions
+                        </a>
+
+                    </label>
+
+                </div>
+
+
+                <!-- Submit -->
+
+                <button
+                    type="submit"
+                    class="create-btn"
+                    id="createButton">
+
+                    Create Worker Account
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         REGISTRATION SUCCESS PAGE
+    ====================================================== -->
+
+    {% if registration_success %}
+
+    <div class="success-container">
+
+        <div class="success-card">
+
+            <!-- Success Icon -->
+
+            <div class="success-icon">
+
+                <i class="fa-solid fa-check"></i>
+
+            </div>
+
+
+            <h1>
+                Registration Successful!
+            </h1>
+
+
+            <p class="success-welcome">
+
+                Welcome to SmartClean,
+                <strong>{{ worker_name }}</strong>!
+
+            </p>
+
+
+            <!-- Worker ID -->
+
+            <div class="worker-id-box">
+
+                <div class="worker-id-label">
+                    YOUR WORKER ID
+                </div>
+
+
+                <div
+                    class="worker-id"
+                    id="workerId">
+
+                    {{ worker_id }}
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="copy-id-btn"
+                    onclick="copyWorkerId()">
+
+                    <i class="fa-solid fa-copy"></i>
+
+                    Copy Worker ID
+
+                </button>
+
+            </div>
+
+
+            <!-- Important Message -->
+
+            <div class="important-message">
+
+                <div class="important-icon">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+
+                <div>
+
+                    <strong>
+                        Save your Worker ID
+                    </strong>
+
+                    <p>
+                        You will need this Worker ID
+                        and your password to log in.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Login -->
+
+            <a
+                href="{{ url_for('worker_login') }}"
+                class="login-now-btn">
+
+                Go to Worker Login
+
+                <span>
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- Register Another -->
+
+            <a
+                href="{{ url_for('worker_register') }}"
+                class="register-again">
+
+                Register another worker
+
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+
+        /* =========================
+           PASSWORD TOGGLE
+        ========================= */
+
+        function togglePassword(fieldId, icon) {
+
+            const passwordField =
+                document.getElementById(fieldId);
+
+
+            if (passwordField.type === "password") {
+
+                passwordField.type = "text";
+
+                icon.classList.remove(
+                    "fa-eye"
+                );
+
+                icon.classList.add(
+                    "fa-eye-slash"
+                );
+
+            } else {
+
+                passwordField.type = "password";
+
+                icon.classList.remove(
+                    "fa-eye-slash"
+                );
+
+                icon.classList.add(
+                    "fa-eye"
+                );
+
+            }
+
+        }
+
+
+        /* =========================
+           PASSWORD MATCH
+        ========================= */
+
+        const password =
+            document.getElementById("password");
+
+        const confirmPassword =
+            document.getElementById("confirmPassword");
+
+        const passwordMessage =
+            document.getElementById("passwordMessage");
+
+
+        function checkPassword() {
+
+            if (!password || !confirmPassword) {
+                return;
+            }
+
+
+            if (confirmPassword.value === "") {
+
+                passwordMessage.textContent = "";
+
+                passwordMessage.className =
+                    "password-message";
+
+                return;
+
+            }
+
+
+            if (
+                password.value ===
+                confirmPassword.value
+            ) {
+
+                passwordMessage.innerHTML =
+                    '<i class="fa-solid fa-check"></i> Passwords match';
+
+                passwordMessage.className =
+                    "password-message match";
+
+            } else {
+
+                passwordMessage.innerHTML =
+                    '<i class="fa-solid fa-xmark"></i> Passwords do not match';
+
+                passwordMessage.className =
+                    "password-message no-match";
+
+            }
+
+        }
+
+
+        if (password) {
+
+            password.addEventListener(
+                "input",
+                checkPassword
+            );
+
+        }
+
+
+        if (confirmPassword) {
+
+            confirmPassword.addEventListener(
+                "input",
+                checkPassword
+            );
+
+        }
+
+
+        /* =========================
+           FORM VALIDATION
+        ========================= */
+
+        const form =
+            document.getElementById(
+                "workerRegistrationForm"
+            );
+
+
+        if (form) {
+
+            form.addEventListener(
+                "submit",
+                function(event) {
+
+                    if (
+                        password.value !==
+                        confirmPassword.value
+                    ) {
+
+                        event.preventDefault();
+
+                        alert(
+                            "Passwords do not match."
+                        );
+
+                        confirmPassword.focus();
+
+                        return;
+
+                    }
+
+
+                    const phone =
+                        document.getElementById(
+                            "phone"
+                        );
+
+
+                    if (
+                        phone.value.length !== 10
+                    ) {
+
+                        event.preventDefault();
+
+                        alert(
+                            "Please enter a valid 10-digit phone number."
+                        );
+
+                        phone.focus();
+
+                        return;
+
+                    }
+
+
+                    const button =
+                        document.getElementById(
+                            "createButton"
+                        );
+
+
+                    button.disabled = true;
+
+                    button.innerHTML =
+                        `
+                        Creating Account...
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        `;
+
+                }
+            );
+
+        }
+
+
+        /* =========================
+           COPY WORKER ID
+        ========================= */
+
+        function copyWorkerId() {
+
+            const workerId =
+                document.getElementById(
+                    "workerId"
+                );
+
+
+            if (!workerId) {
+                return;
+            }
+
+
+            const text =
+                workerId.textContent.trim();
+
+
+            navigator.clipboard.writeText(text)
+                .then(function() {
+
+                    const button =
+                        document.querySelector(
+                            ".copy-id-btn"
+                        );
+
+
+                    button.innerHTML =
+                        `
+                        <i class="fa-solid fa-check"></i>
+                        Copied!
+                        `;
+
+
+                    setTimeout(
+                        function() {
+
+                            button.innerHTML =
+                                `
+                                <i class="fa-solid fa-copy"></i>
+                                Copy Worker ID
+                                `;
+
+                        },
+                        2000
+                    );
+
+                })
+                .catch(function() {
+
+                    alert(
+                        "Your Worker ID is: " + text
+                    );
+
+                });
+
+        }
+
+    </script>
+
+</body>
+</html>
