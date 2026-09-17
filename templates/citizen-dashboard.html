@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -141,11 +140,28 @@
             </div>
 
 
-            <div class="online-status">
+            <div class="welcome-right">
 
-                <span class="status-dot"></span>
 
-                Account Active
+                <!-- PROFILE BUTTON -->
+
+                <a href="/citizen-profile"
+                   class="profile-button">
+
+                    👤 My Profile
+
+                </a>
+
+
+                <!-- ACCOUNT STATUS -->
+
+                <div class="online-status">
+
+                    <span class="status-dot"></span>
+
+                    Account Active
+
+                </div>
 
             </div>
 
@@ -232,7 +248,7 @@
 
                 <div>
 
-                    <span class="stat-number">
+                    <span class="stat-number" id="citizenTotal">
                         0
                     </span>
 
@@ -253,7 +269,7 @@
 
                 <div>
 
-                    <span class="stat-number">
+                    <span class="stat-number" id="citizenPending">
                         0
                     </span>
 
@@ -274,7 +290,7 @@
 
                 <div>
 
-                    <span class="stat-number">
+                    <span class="stat-number" id="citizenProgress">
                         0
                     </span>
 
@@ -295,7 +311,7 @@
 
                 <div>
 
-                    <span class="stat-number">
+                    <span class="stat-number" id="citizenResolved">
                         0
                     </span>
 
@@ -338,28 +354,11 @@
             </div>
 
 
-            <div class="empty-complaints">
-
-                <div class="empty-icon">
-                    🗂️
-                </div>
-
-                <h3>
-                    No complaints yet
-                </h3>
-
-                <p>
-                    You haven't reported any garbage
-                    issues yet.
-                </p>
-
-                <a href="/report-issue"
-                   class="empty-button">
-
-                    Report Your First Issue
-
-                </a>
-
+            <div class="empty-complaints" id="citizenComplaintsList">
+                <div class="empty-icon">🗂️</div>
+                <h3>No complaints yet</h3>
+                <p>You haven't reported any garbage issues yet.</p>
+                <a href="/report-issue" class="empty-button">Report Your First Issue</a>
             </div>
 
         </section>
@@ -430,7 +429,45 @@
 </footer>
 
 
+
+<script>
+async function loadCitizenDashboard() {
+    try {
+        const response = await fetch("/api/citizen/dashboard");
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || "Unable to load dashboard.");
+
+        document.getElementById("citizenTotal").textContent = data.total;
+        document.getElementById("citizenPending").textContent = data.pending + data.assigned;
+        document.getElementById("citizenProgress").textContent = data.in_progress;
+        document.getElementById("citizenResolved").textContent = data.resolved;
+
+        const box = document.getElementById("citizenComplaintsList");
+        if (!data.recent || !data.recent.length) return;
+
+        box.innerHTML = data.recent.map(c => `
+            <div class="recent-complaint-row" style="display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #e5eee8;">
+                <div>
+                    <strong>${escapeHtml(c.id)}</strong>
+                    <div>${escapeHtml(c.issue_type)}</div>
+                    <small>${escapeHtml(c.location)} · ${escapeHtml(c.date)}</small>
+                </div>
+                <span>${escapeHtml(c.status)}</span>
+            </div>
+        `).join("") + `
+            <a href="/track" class="empty-button" style="display:inline-block;margin-top:16px;">Track Complaints</a>
+        `;
+    } catch (error) {
+        console.error("Citizen dashboard:", error);
+    }
+}
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[ch]));
+}
+loadCitizenDashboard();
+</script>
 </body>
 
 </html>
-
