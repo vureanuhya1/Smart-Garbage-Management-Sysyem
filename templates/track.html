@@ -178,7 +178,7 @@
                 <input
                     type="text"
                     id="complaintInput"
-                    placeholder="Example: CW-1042"
+                    placeholder="Example: CW-0001"
                     autocomplete="off"
                 >
 
@@ -202,15 +202,15 @@
 
                 Try:
 
-                <button onclick="loadSample('CW-1042')">
+                <button onclick="loadSample('CW-0001')">
                     CW-1042
                 </button>
 
-                <button onclick="loadSample('CW-1038')">
+                <button onclick="loadSample('CW-0005')">
                     CW-1038
                 </button>
 
-                <button onclick="loadSample('CW-1051')">
+                <button onclick="loadSample('CW-0002')">
                     CW-1051
                 </button>
 
@@ -481,467 +481,30 @@
 ===================================================== -->
 
 <script>
-
-
-// =====================================================
-// SAMPLE COMPLAINT DATA
-// =====================================================
-
-const complaints = {
-
-    "CW-1042": {
-
-        title:
-            "Overflowing bin near bus stop",
-
-        ward:
-            "Ward 3",
-
-        filed:
-            "12 Aug 2026",
-
-        status:
-            "In Progress",
-
-        location:
-            "MG Road, near Bus Stop 4",
-
-        worker:
-            "R. Naidu",
-
-        category:
-            "Overflowing Bin",
-
-        updated:
-            "2 hours ago"
-
-    },
-
-
-    "CW-1038": {
-
-        title:
-            "Garbage pile uncollected for 3 days",
-
-        ward:
-            "Ward 1",
-
-        filed:
-            "9 Aug 2026",
-
-        status:
-            "Completed",
-
-        location:
-            "2nd Cross Street",
-
-        worker:
-            "S. Kumar",
-
-        category:
-            "Uncollected Waste",
-
-        updated:
-            "1 day ago"
-
-    },
-
-
-    "CW-1051": {
-
-        title:
-            "Broken dustbin lid attracting stray animals",
-
-        ward:
-            "Ward 5",
-
-        filed:
-            "16 Aug 2026",
-
-        status:
-            "Submitted",
-
-        location:
-            "Lakeview Colony, Gate 2",
-
-        worker:
-            "Not yet assigned",
-
-        category:
-            "Damaged Bin",
-
-        updated:
-            "3 hours ago"
-
-    }
-
-};
-
-
-
-// =====================================================
-// STATUS STAGES
-// =====================================================
-
-const stages = [
-
-    "Submitted",
-
-    "Assigned",
-
-    "In Progress",
-
-    "Completed"
-
-];
-
-
-
-// =====================================================
-// STATUS CLASS
-// =====================================================
-
-function getStatusClass(status) {
-
-    if (status === "Completed") {
-
-        return "completed";
-
-    }
-
-
-    if (status === "Submitted") {
-
-        return "submitted";
-
-    }
-
-
-    return "progress";
-
-}
-
-
-
-// =====================================================
-// RENDER STEPPER
-// =====================================================
-
+const stages = ["Submitted", "Assigned", "In Progress", "Completed"];
+function getStatusClass(status) { return status === "Completed" ? "completed" : status === "Submitted" ? "submitted" : "progress"; }
 function renderStepper(status) {
-
-    const stepper =
-        document.getElementById("stepper");
-
-
-    stepper.innerHTML = "";
-
-
-    const currentIndex =
-        stages.indexOf(status);
-
-
-    stages.forEach(function(stage, index) {
-
-
-        const step =
-            document.createElement("div");
-
-
-        step.className =
-            "step";
-
-
-        if (index < currentIndex) {
-
-            step.classList.add("done");
-
-        }
-
-
-        if (index === currentIndex) {
-
-            step.classList.add("current");
-
-        }
-
-
-        const number =
-            index < currentIndex
-                ? "✓"
-                : index + 1;
-
-
-        step.innerHTML = `
-
-            <div class="step-line"></div>
-
-            <div class="step-circle">
-                ${number}
-            </div>
-
-            <strong>
-                ${stage}
-            </strong>
-
-        `;
-
-
-        stepper.appendChild(step);
-
-    });
-
+  const el=document.getElementById("stepper"); el.innerHTML="";
+  const idx=stages.indexOf(status);
+  stages.forEach((stage,i)=>{ const step=document.createElement("div"); step.className="step"; if(i<idx) step.classList.add("done"); if(i===idx) step.classList.add("current"); step.innerHTML=`<div class="step-line"></div><div class="step-circle">${i<idx?"✓":i+1}</div><strong>${stage}</strong>`; el.appendChild(step); });
 }
-
-
-
-// =====================================================
-// SHOW COMPLAINT
-// =====================================================
-
-function showComplaint(id) {
-
-    const data =
-        complaints[id];
-
-
-    const result =
-        document.getElementById("result");
-
-
-    const notFound =
-        document.getElementById("notFound");
-
-
-    if (!data) {
-
-        result.classList.remove("show");
-
-        notFound.classList.add("show");
-
-        return;
-
-    }
-
-
-    notFound.classList.remove("show");
-
-
-    document.getElementById("rId")
-        .textContent = id;
-
-
-    document.getElementById("rTitle")
-        .textContent = data.title;
-
-
-    document.getElementById("rMeta")
-        .textContent =
-        `${data.ward} · Filed ${data.filed}`;
-
-
-    const badge =
-        document.getElementById("rBadge");
-
-
-    badge.textContent =
-        data.status;
-
-
-    badge.className =
-        "status-badge " +
-        getStatusClass(data.status);
-
-
-    document.getElementById("rLocation")
-        .textContent = data.location;
-
-
-    document.getElementById("rWorker")
-        .textContent = data.worker;
-
-
-    document.getElementById("rCategory")
-        .textContent = data.category;
-
-
-    document.getElementById("rUpdated")
-        .textContent = data.updated;
-
-
-    renderStepper(data.status);
-
-
-    result.classList.add("show");
-
-
-    result.scrollIntoView({
-
-        behavior: "smooth",
-
-        block: "center"
-
-    });
-
+async function showComplaint(id) {
+  const result=document.getElementById("result"), notFound=document.getElementById("notFound");
+  try { const r=await fetch(`/api/complaints/${encodeURIComponent(id)}`); const data=await r.json(); if(!r.ok) throw new Error(data.message);
+    notFound.classList.remove("show"); document.getElementById("rId").textContent=data.id; document.getElementById("rTitle").textContent=data.title; document.getElementById("rMeta").textContent=`${data.ward} · Filed ${data.filed}`;
+    const badge=document.getElementById("rBadge"); badge.textContent=data.status; badge.className="status-badge "+getStatusClass(data.status);
+    document.getElementById("rLocation").textContent=data.location; document.getElementById("rWorker").textContent=data.worker; document.getElementById("rCategory").textContent=data.category; document.getElementById("rUpdated").textContent=data.updated; renderStepper(data.status); result.classList.add("show"); result.scrollIntoView({behavior:"smooth",block:"center"});
+  } catch(e) { result.classList.remove("show"); notFound.classList.add("show"); }
 }
-
-
-
-// =====================================================
-// TRACK BUTTON
-// =====================================================
-
-function trackComplaint() {
-
-    const input =
-        document.getElementById("complaintInput");
-
-
-    const id =
-        input.value
-            .trim()
-            .toUpperCase();
-
-
-    if (!id) {
-
-        input.focus();
-
-        return;
-
-    }
-
-
-    showComplaint(id);
-
+function trackComplaint(){ const input=document.getElementById("complaintInput"); const id=input.value.trim().toUpperCase(); if(id) showComplaint(id); else input.focus(); }
+function loadSample(id){ document.getElementById("complaintInput").value=id; showComplaint(id); }
+document.getElementById("complaintInput").addEventListener("keydown",e=>{if(e.key==="Enter")trackComplaint();});
+async function renderComplaintList(){
+  const list=document.getElementById("complaintList"); if(!list) return;
+  const input=document.getElementById("complaintInput");
+  try { const r=await fetch("/api/complaints/recent"); if(!r.ok) return; const rows=await r.json(); list.innerHTML=""; rows.forEach(data=>{const row=document.createElement("div"); row.className="complaint-row"; row.onclick=()=>{input.value=data.id;showComplaint(data.id)}; row.innerHTML=`<div class="row-info"><span class="row-id">${data.id}</span><h3>${data.title}</h3><p>${data.location}</p></div><div class="row-status ${getStatusClass(data.status)}">${data.status}</div>`; list.appendChild(row);}); } catch(e){}
 }
-
-
-
-// =====================================================
-// SAMPLE BUTTON
-// =====================================================
-
-function loadSample(id) {
-
-    document.getElementById(
-        "complaintInput"
-    ).value = id;
-
-
-    showComplaint(id);
-
-}
-
-
-
-// =====================================================
-// ENTER KEY
-// =====================================================
-
-document
-    .getElementById("complaintInput")
-    .addEventListener(
-        "keydown",
-        function(event) {
-
-            if (event.key === "Enter") {
-
-                trackComplaint();
-
-            }
-
-        }
-    );
-
-
-
-// =====================================================
-// RECENT COMPLAINT LIST
-// =====================================================
-
-function renderComplaintList() {
-
-    const list =
-        document.getElementById(
-            "complaintList"
-        );
-
-
-    list.innerHTML = "";
-
-
-    Object.entries(complaints)
-        .forEach(function([id, data]) {
-
-
-            const row =
-                document.createElement("div");
-
-
-            row.className =
-                "complaint-row";
-
-
-            row.onclick =
-                function() {
-
-                    document
-                        .getElementById(
-                            "complaintInput"
-                        )
-                        .value = id;
-
-
-                    showComplaint(id);
-
-                };
-
-
-            row.innerHTML = `
-
-                <div class="row-info">
-
-                    <span class="row-id">
-                        ${id}
-                    </span>
-
-                    <h3>
-                        ${data.title}
-                    </h3>
-
-                    <p>
-                        ${data.location}
-                    </p>
-
-                </div>
-
-
-                <div class="
-                    row-status
-                    ${getStatusClass(data.status)}
-                ">
-
-                    ${data.status}
-
-                </div>
-
-            `;
-
-
-            list.appendChild(row);
-
-        });
-
-}
-
-
-
-// =====================================================
-// INITIALIZE
-// =====================================================
-
 renderComplaintList();
-
 </script>
 
 
