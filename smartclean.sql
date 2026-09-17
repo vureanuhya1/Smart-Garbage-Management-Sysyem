@@ -42,6 +42,7 @@ CREATE TABLE admins (
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     phone VARCHAR(15) UNIQUE,
+    address VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE issue_categories (
@@ -192,7 +193,7 @@ VALUES
 
 (15, 'Others', 5, 'Indira Nagar',
  'A different garbage-related issue has been reported.',
- 'uploads/other3.jpg', 'Pending');
+ 'uploads/other3.jpg', 'Assigned');
 
 SELECT * FROM complaints;
 
@@ -228,24 +229,23 @@ SELECT * FROM admins;
 INSERT INTO complaint_updates
 (complaint_id, updated_by, old_status, new_status, update_description)
 VALUES
-(1, 1, 'Pending', 'In Progress', 'Complaint has been assigned to a worker and work has started.'),
-(2, 2, 'Pending', 'In Progress', 'Damaged bin complaint is being inspected by the assigned worker.'),
-(3, 1, 'Pending', 'In Progress', 'Uncollected waste complaint has been forwarded to the collection team.'),
-(4, 2, 'Pending', 'In Progress', 'Illegal dumping complaint is being investigated.'),
-(5, 1, 'Pending', 'Resolved', 'Garbage-related issue has been checked and resolved.'),
-(6, 2, 'Pending', 'In Progress', 'Overflowing bin complaint is being handled by the assigned worker.'),
-(7, 1, 'Pending', 'Resolved', 'Damaged bin has been repaired or replaced.'),
-(8, 2, 'Pending', 'In Progress', 'Waste collection issue is currently being handled.'),
-(9, 1, 'Pending', 'In Progress', 'Illegal dumping location has been inspected.'),
-(10, 2, 'Pending', 'Resolved', 'The reported garbage-related issue has been resolved.'),
-(11, 1, 'Pending', 'In Progress', 'Overflowing bin is scheduled for cleaning and collection.'),
-(12, 2, 'Pending', 'Resolved', 'Damaged bin complaint has been resolved.'),
-(13, 1, 'Pending', 'In Progress', 'Uncollected waste complaint is being processed.'),
-(14, 2, 'Pending', 'In Progress', 'Illegal dumping complaint is under review.'),
-(15, 1, 'Pending', 'Resolved', 'The reported issue has been inspected and resolved.');
+(1, 1, 'Pending', 'Assigned', 'Complaint assigned to the field worker.'),
+(2, 2, 'Pending', 'Assigned', 'Complaint assigned to the field worker.'),
+(3, 1, 'Pending', 'Assigned', 'Complaint assigned to the field worker.'),
+(4, 2, 'Pending', 'Assigned', 'Complaint assigned to the field worker.'),
+(5, 1, 'Pending', 'Assigned', 'Complaint assigned to the field worker.'),
+(6, 2, 'Pending', 'Assigned', 'Complaint assigned to the field worker.'),
+(7, 1, 'Pending', 'Assigned', 'Complaint assigned to the field worker.'),
+(8, 2, 'Pending', 'Assigned', 'Complaint assigned to the field worker.'),
+(9, 1, 'Pending', 'Assigned', 'Complaint assigned to the field worker.'),
+(10, 2, 'Pending', 'Assigned', 'Complaint assigned to the field worker.'),
+(11, 1, 'Pending', 'Assigned', 'Complaint assigned to the field worker.'),
+(12, 2, 'Pending', 'Assigned', 'Complaint assigned to the field worker.'),
+(13, 1, 'Pending', 'Assigned', 'Complaint assigned to the field worker.'),
+(14, 2, 'Pending', 'Assigned', 'Complaint assigned to the field worker.'),
+(15, 1, 'Pending', 'Assigned', 'Complaint assigned to the field worker.');
 
 SELECT * FROM complaint_updates;
-
 
 
 
