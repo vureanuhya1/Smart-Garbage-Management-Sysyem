@@ -1,420 +1,400 @@
-/* =====================================================
-   SMARTCLEAN — WORKER DASHBOARD JAVASCRIPT
-===================================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    /* =================================================
-       SAMPLE WORKER DATA
-       Later this can come from Flask/MySQL
-    ================================================= */
-
-    const worker = {
-        name: "Ravi Kumar",
-        id: "WRK-1001"
-    };
-
-
-    const tasks = [
-        {
-            id: "CW-1042",
-            title: "Overflowing bin near bus stop",
-            location: "MG Road, near Bus Stop 4",
-            status: "In Progress"
-        },
-        {
-            id: "CW-1051",
-            title: "Broken dustbin lid",
-            location: "Lakeview Colony, Gate 2",
-            status: "Pending"
-        },
-        {
-            id: "CW-1038",
-            title: "Garbage pile uncollected",
-            location: "2nd Cross Street",
-            status: "Completed"
-        },
-        {
-            id: "CW-1057",
-            title: "Waste collection required",
-            location: "Green Park Road",
-            status: "Pending"
-        }
-    ];
-
-
-    /* =================================================
-       WORKER NAME
-    ================================================= */
-
-    const workerName =
-        document.getElementById("workerName");
-
-    const profileName =
-        document.getElementById("profileName");
-
-    const profileId =
-        document.getElementById("profileId");
-
-
-    if (workerName) {
-        workerName.textContent = worker.name;
-    }
-
-    if (profileName) {
-        profileName.textContent = worker.name;
-    }
-
-    if (profileId) {
-        profileId.textContent = worker.id;
-    }
-
-
-    /* =================================================
-       TODAY'S DATE
-    ================================================= */
-
-    const todayDate =
-        document.getElementById("todayDate");
-
+    // Display today's date
+    const todayDate = document.getElementById("todayDate");
 
     if (todayDate) {
-
         const today = new Date();
 
-        const options = {
+        todayDate.textContent = today.toLocaleDateString("en-IN", {
             day: "numeric",
             month: "short",
             year: "numeric"
-        };
-
-        todayDate.textContent =
-            today.toLocaleDateString(
-                "en-IN",
-                options
-            );
+        });
     }
 
+    loadWorkerDashboard();
 
-    /* =================================================
-       RENDER TASKS
-    ================================================= */
+    // Refresh dashboard data periodically.
+    setInterval(loadWorkerDashboard, 30000);
+});
+document.addEventListener("DOMContentLoaded", function () {
+    loadWorkerDashboard();
 
-    const taskList =
-        document.getElementById("taskList");
-
-
-    function getStatusClass(status) {
-
-        if (status === "Completed") {
-            return "done";
-        }
-
-        if (status === "In Progress") {
-            return "progress";
-        }
-
-        return "pending";
-    }
+    // Refresh dashboard data periodically.
+    setInterval(loadWorkerDashboard, 30000);
+});
 
 
-    function getStatusIcon(status) {
-
-        if (status === "Completed") {
-            return "✓";
-        }
-
-        if (status === "In Progress") {
-            return "⏳";
-        }
-
-        return "📋";
-    }
-
-
-    function renderTasks() {
-
-        if (!taskList) {
-            return;
-        }
-
-
-        taskList.innerHTML = "";
-
-
-        tasks.forEach(function (task, index) {
-
-            const item =
-                document.createElement("div");
-
-
-            item.className = "task-item";
-
-
-            item.style.animation =
-                `dashboardAppear 0.5s ease ${index * 0.08}s both`;
-
-
-            item.innerHTML = `
-
-                <div class="task-info">
-
-                    <div class="task-icon">
-                        ${getStatusIcon(task.status)}
-                    </div>
-
-                    <div class="task-text">
-
-                        <strong>
-                            ${task.id} · ${task.title}
-                        </strong>
-
-                        <span>
-                            ${task.location}
-                        </span>
-
-                    </div>
-
-                </div>
-
-                <span class="task-status ${getStatusClass(task.status)}">
-
-                    ${task.status}
-
-                </span>
-
-            `;
-
-
-            taskList.appendChild(item);
-
+async function loadWorkerDashboard() {
+    try {
+        const response = await fetch("/api/worker/dashboard", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            credentials: "same-origin"
         });
 
-    }
-
-
-    renderTasks();
-
-
-    /* =================================================
-       PROFILE MODAL
-    ================================================= */
-
-    const profileButton =
-        document.getElementById("profileButton");
-
-    const profileQuickButton =
-        document.getElementById("profileQuickButton");
-
-    const profileModal =
-        document.getElementById("profileModal");
-
-    const closeProfile =
-        document.getElementById("closeProfile");
-
-    const modalOverlay =
-        profileModal
-            ? profileModal.querySelector(".modal-overlay")
-            : null;
-
-
-    function openProfile() {
-
-        if (!profileModal) {
+        if (response.status === 401 || response.status === 403) {
+            window.location.href = "/worker-login";
             return;
         }
 
-        profileModal.hidden = false;
+        if (!response.ok) {
+            throw new Error(
+                "Dashboard request failed: " + response.status
+            );
+        }
 
-        document.body.style.overflow = "hidden";
+        const data = await response.json();
+
+        updateDashboardStatistics(data);
+        updateRecentComplaints(data);
+        updateWorkerInformation(data);
+
+    } catch (error) {
+        console.error("Worker dashboard error:", error);
+
+        showDashboardError(
+            "Unable to load the latest dashboard data."
+        );
+    }
+}
+
+
+/*
+ * Update dashboard statistic cards.
+ */
+function updateDashboardStatistics(data) {
+    const totalAssigned =
+        getValue(
+            data,
+            [
+                "total_assigned",
+                "assigned",
+                "total"
+            ],
+            0
+        );
+
+    const pending =
+        getValue(
+            data,
+            [
+                "pending",
+                "pending_count"
+            ],
+            0
+        );
+
+    const inProgress =
+        getValue(
+            data,
+            [
+                "in_progress",
+                "in_progress_count"
+            ],
+            0
+        );
+
+    const resolved =
+        getValue(
+            data,
+            [
+                "resolved",
+                "resolved_count",
+                "completed",
+                "completed_count"
+            ],
+            0
+        );
+
+    const efficiency =
+        getValue(
+            data,
+            [
+                "efficiency",
+                "efficiency_percentage"
+            ],
+            0
+        );
+
+    updateElement(
+        [
+            "totalAssigned",
+            "assignedCount",
+            "total-assigned"
+        ],
+        totalAssigned
+    );
+
+    updateElement(
+        [
+            "pendingCount",
+            "pending",
+            "pending-complaints"
+        ],
+        pending
+    );
+
+    updateElement(
+        [
+            "inProgressCount",
+            "in-progress-count",
+            "inProgress"
+        ],
+        inProgress
+    );
+
+    updateElement(
+        [
+            "resolvedCount",
+            "resolved",
+            "resolved-complaints",
+            "completedCount"
+        ],
+        resolved
+    );
+
+    updateElement(
+        [
+            "efficiency",
+            "efficiencyValue",
+            "efficiencyPercentage"
+        ],
+        formatPercentage(efficiency)
+    );
+}
+
+
+/*
+ * Update recent complaint information if
+ * the dashboard API provides it.
+ */
+function updateRecentComplaints(data) {
+    let complaints =
+        data.complaints ||
+        data.recent_complaints ||
+        data.recent ||
+        [];
+
+    if (!Array.isArray(complaints)) {
+        return;
     }
 
+    const container =
+        document.getElementById("recentComplaints") ||
+        document.getElementById("recent-complaints") ||
+        document.querySelector(".recent-complaints-list");
 
-    function closeProfileModal() {
+    if (!container) {
+        return;
+    }
 
-        if (!profileModal) {
+    if (complaints.length === 0) {
+        container.innerHTML =
+            '<p class="empty-state">No complaints found.</p>';
+        return;
+    }
+
+    container.innerHTML = "";
+
+    complaints.forEach(function (complaint) {
+        const item = document.createElement("div");
+
+        item.className = "recent-complaint-item";
+
+        const complaintId =
+            complaint.complaint_display_id ||
+            complaint.display_id ||
+            complaint.complaint_id ||
+            "N/A";
+
+        const issueType =
+            complaint.issue_type ||
+            complaint.category ||
+            "Garbage complaint";
+
+        const status =
+            complaint.status ||
+            "Assigned";
+
+        item.innerHTML = `
+            <div class="complaint-info">
+                <strong>${escapeHtml(String(complaintId))}</strong>
+                <span>${escapeHtml(String(issueType))}</span>
+            </div>
+
+            <span class="status-badge status-${getStatusClass(status)}">
+                ${escapeHtml(String(status))}
+            </span>
+        `;
+
+        container.appendChild(item);
+    });
+}
+
+
+/*
+ * Update worker information.
+ */
+function updateWorkerInformation(data) {
+    const worker =
+        data.worker ||
+        data.profile ||
+        {};
+
+    if (worker.name) {
+        updateElement(
+            [
+                "workerName",
+                "worker-name",
+                "profileWorkerName"
+            ],
+            worker.name
+        );
+    }
+
+    if (worker.worker_id) {
+        updateElement(
+            [
+                "workerId",
+                "worker-id",
+                "profileWorkerId"
+            ],
+            worker.worker_id
+        );
+    }
+
+    if (worker.email) {
+        updateElement(
+            [
+                "workerEmail",
+                "worker-email"
+            ],
+            worker.email
+        );
+    }
+}
+
+
+/*
+ * Generic value finder.
+ */
+function getValue(object, keys, defaultValue) {
+    if (!object || typeof object !== "object") {
+        return defaultValue;
+    }
+
+    for (const key of keys) {
+        if (
+            Object.prototype.hasOwnProperty.call(object, key) &&
+            object[key] !== null &&
+            object[key] !== undefined
+        ) {
+            return object[key];
+        }
+    }
+
+    return defaultValue;
+}
+
+
+/*
+ * Update the first matching element.
+ */
+function updateElement(ids, value) {
+    for (const id of ids) {
+        const element = document.getElementById(id);
+
+        if (element) {
+            element.textContent = value;
             return;
         }
+    }
+}
 
-        profileModal.hidden = true;
 
-        document.body.style.overflow = "";
+/*
+ * Convert efficiency to a display percentage.
+ */
+function formatPercentage(value) {
+    const number = Number(value);
+
+    if (!Number.isFinite(number)) {
+        return "0%";
     }
 
+    return Math.max(0, Math.min(100, number)).toFixed(0) + "%";
+}
 
-    if (profileButton) {
 
-        profileButton.addEventListener(
-            "click",
-            openProfile
-        );
+/*
+ * Convert status into a CSS-friendly class.
+ */
+function getStatusClass(status) {
+    const normalized =
+        String(status || "")
+            .trim()
+            .toLowerCase();
 
+    switch (normalized) {
+        case "assigned":
+            return "assigned";
+
+        case "in progress":
+        case "in-progress":
+        case "in_progress":
+            return "in-progress";
+
+        case "resolved":
+            return "resolved";
+
+        case "pending":
+            return "pending";
+
+        default:
+            return "unknown";
+    }
+}
+
+
+/*
+ * Prevent HTML injection when displaying database values.
+ */
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/*
+ * Show a dashboard error without breaking the page.
+ */
+function showDashboardError(message) {
+    let errorElement =
+        document.getElementById("dashboardError");
+
+    if (!errorElement) {
+        const dashboard =
+            document.querySelector(".dashboard") ||
+            document.querySelector("main") ||
+            document.body;
+
+        errorElement = document.createElement("div");
+        errorElement.id = "dashboardError";
+        errorElement.className = "dashboard-error";
+
+        dashboard.prepend(errorElement);
     }
 
-
-    if (profileQuickButton) {
-
-        profileQuickButton.addEventListener(
-            "click",
-            openProfile
-        );
-
-    }
-
-
-    if (closeProfile) {
-
-        closeProfile.addEventListener(
-            "click",
-            closeProfileModal
-        );
-
-    }
-
-
-    if (modalOverlay) {
-
-        modalOverlay.addEventListener(
-            "click",
-            closeProfileModal
-        );
-
-    }
-
-
-    /* =================================================
-       ESCAPE KEY CLOSES MODAL
-    ================================================= */
-
-    document.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (
-                event.key === "Escape" &&
-                profileModal &&
-                !profileModal.hidden
-            ) {
-
-                closeProfileModal();
-
-            }
-
-        }
-    );
-
-
-    /* =================================================
-       LOGOUT
-    ================================================= */
-
-    const logoutButton =
-        document.getElementById("logoutButton");
-
-
-    if (logoutButton) {
-
-        logoutButton.addEventListener(
-            "click",
-            function () {
-
-                const confirmLogout =
-                    confirm(
-                        "Are you sure you want to logout?"
-                    );
-
-
-                if (!confirmLogout) {
-                    return;
-                }
-
-
-                /*
-                   Later this can call Flask:
-
-                   fetch("/worker-logout", {
-                       method: "POST"
-                   })
-                */
-
-
-                window.location.href =
-                    "/worker-login";
-
-            }
-        );
-
-    }
-
-
-    /* =================================================
-       SIMPLE STATISTICS ANIMATION
-    ================================================= */
-
-    function animateNumber(
-        elementId,
-        target
-    ) {
-
-        const element =
-            document.getElementById(elementId);
-
-
-        if (!element) {
-            return;
-        }
-
-
-        let current = 0;
-
-        const duration = 800;
-
-        const intervalTime = 30;
-
-        const increment =
-            target /
-            (duration / intervalTime);
-
-
-        const timer =
-            setInterval(function () {
-
-                current += increment;
-
-
-                if (current >= target) {
-
-                    current = target;
-
-                    clearInterval(timer);
-
-                }
-
-
-                element.textContent =
-                    Math.floor(current);
-
-            }, intervalTime);
-
-    }
-
-
-    animateNumber(
-        "assignedCount",
-        12
-    );
-
-
-    animateNumber(
-        "pendingCount",
-        5
-    );
-
-
-    animateNumber(
-        "completedCount",
-        7
-    );
-
-
-});
+    errorElement.textContent = message;
+    errorElement.style.display = "block";
+}
