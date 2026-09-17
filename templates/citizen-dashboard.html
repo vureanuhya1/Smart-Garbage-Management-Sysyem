@@ -1,4 +1,4 @@
-
+tatic %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,10 +12,10 @@
     <title>Citizen Dashboard | SmartClean</title>
 
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/common.css') }}">
+          href="{% static 'css/common.css' %}">
 
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/citizen-dashboard.css') }}">
+          href="{% static 'css/citizen-dashboard.css' %}">
 
 </head>
 
@@ -141,11 +141,28 @@
             </div>
 
 
-            <div class="online-status">
+            <div class="welcome-right">
 
-                <span class="status-dot"></span>
 
-                Account Active
+                <!-- PROFILE BUTTON -->
+
+                <a href="/citizen-profile"
+                   class="profile-button">
+
+                    👤 My Profile
+
+                </a>
+
+
+                <!-- ACCOUNT STATUS -->
+
+                <div class="online-status">
+
+                    <span class="status-dot"></span>
+
+                    Account Active
+
+                </div>
 
             </div>
 
@@ -430,7 +447,7 @@
 </footer>
 
 
+
 </body>
 
 </html>
-
