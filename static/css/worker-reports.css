@@ -901,6 +901,49 @@
         0 6px 16px rgba(35, 93, 67, 0.10);
 }
 
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.footer {
+
+    padding:
+        30px 7%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    background:
+        #f7fbf8;
+
+    border-top:
+        1px solid #dfeae3;
+
+    color:
+        #718078;
+
+    font-size: 12px;
+}
+
+
+.footer strong {
+
+    color: #176b42;
+
+    font-size: 15px;
+}
+
+
+.footer p {
+
+    margin-top: 4px;
+
+    font-size: 10px;
+}
+
 
 /* Mobile */
 
