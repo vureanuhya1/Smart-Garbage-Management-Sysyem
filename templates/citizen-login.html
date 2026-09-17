@@ -1,3 +1,4 @@
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,10 +13,10 @@
     <title>Citizen Login | SmartClean</title>
 
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/common.css') }}">
+          href="{% static 'css/common.css' %}">
 
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/citizen-login.css') }}">
+          href="{% static 'css/citizen-login.css' %}">
 
 </head>
 
@@ -228,9 +229,11 @@
             </div>
 
 
+            {% if messages %}<div class=\"auth-messages\">{% for message in messages %}<div class=\"auth-message {{ message.tags }}\">{{ message }}</div>{% endfor %}</div>{% endif %}
+
             <form
                 action="/citizen-login"
-                method="POST">
+                method="POST">{% csrf_token %}
 
 
                 <div class="form-group">
@@ -292,7 +295,7 @@
                     </label>
 
 
-                    <a href="#">
+                    <a href="/forgot-password">
                         Forgot Password?
                     </a>
 
