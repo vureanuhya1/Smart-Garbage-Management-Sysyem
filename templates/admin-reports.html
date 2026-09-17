@@ -48,7 +48,7 @@
     <nav>
 
         <ul class="nav-links">
-
+ <li><a href="/admin-profile">Profile</a></li> 
             <li>
                 <a href="/admin-dashboard">
                     Dashboard
@@ -261,9 +261,7 @@
                     Total Complaints
                 </span>
 
-                <strong>
-                    1,248
-                </strong>
+                <strong id="adminTotal">0</strong>
 
                 <small>
                     ↑ 12.5% from last month
@@ -286,9 +284,7 @@
                     Resolved Complaints
                 </span>
 
-                <strong>
-                    1,090
-                </strong>
+                <strong id="adminResolved">0</strong>
 
                 <small class="positive">
                     87.3% resolution rate
@@ -311,9 +307,7 @@
                     Avg. Resolution Time
                 </span>
 
-                <strong>
-                    2.4 hrs
-                </strong>
+                <strong id="adminAvgTime">—</strong>
 
                 <small>
                     ↓ 18% improvement
@@ -336,9 +330,7 @@
                     Active Workers
                 </span>
 
-                <strong>
-                    42
-                </strong>
+                <strong id="adminActiveWorkers">0</strong>
 
                 <small>
                     34 available today
@@ -527,108 +519,8 @@
             </div>
 
 
-            <div class="category-list">
-
-
-                <div class="category-item">
-
-                    <div class="category-title">
-
-                        <span>
-                            Overflowing Bins
-                        </span>
-
-                        <strong>
-                            38%
-                        </strong>
-
-                    </div>
-
-                    <div class="category-track">
-
-                        <div
-                            style="width:38%;">
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="category-item">
-
-                    <div class="category-title">
-
-                        <span>
-                            Uncollected Waste
-                        </span>
-
-                        <strong>
-                            27%
-                        </strong>
-
-                    </div>
-
-                    <div class="category-track">
-
-                        <div
-                            style="width:27%;">
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="category-item">
-
-                    <div class="category-title">
-
-                        <span>
-                            Plastic Waste
-                        </span>
-
-                        <strong>
-                            20%
-                        </strong>
-
-                    </div>
-
-                    <div class="category-track">
-
-                        <div
-                            style="width:20%;">
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="category-item">
-
-                    <div class="category-title">
-
-                        <span>
-                            Roadside Waste
-                        </span>
-
-                        <strong>
-                            15%
-                        </strong>
-
-                    </div>
-
-                    <div class="category-track">
-
-                        <div
-                            style="width:15%;">
-                        </div>
-
-                    </div>
-
-                </div>
-
+            <div class="category-list" id="adminCategoryList">
+                <div class="category-item"><div class="category-title"><span>Loading...</span><strong>0%</strong></div><div class="category-track"><div style="width:0%;"></div></div></div>
             </div>
 
         </div>
@@ -660,94 +552,10 @@
         </div>
 
 
-        <div class="performance-table">
-
+        <div class="performance-table" id="adminPerformanceTable">
             <div class="performance-row header">
-
-                <span>
-                    Worker
-                </span>
-
-                <span>
-                    Completed
-                </span>
-
-                <span>
-                    Avg. Time
-                </span>
-
-                <span>
-                    Rating
-                </span>
-
+                <span>Worker</span><span>Resolved</span><span>Active</span><span>Efficiency</span>
             </div>
-
-
-            <div class="performance-row">
-
-                <span class="worker-name">
-                    <b>01</b>
-                    Ravi Kumar
-                </span>
-
-                <span>
-                    86
-                </span>
-
-                <span>
-                    1.8 hrs
-                </span>
-
-                <span class="rating">
-                    ★ 4.9
-                </span>
-
-            </div>
-
-
-            <div class="performance-row">
-
-                <span class="worker-name">
-                    <b>02</b>
-                    Arjun Rao
-                </span>
-
-                <span>
-                    81
-                </span>
-
-                <span>
-                    2.0 hrs
-                </span>
-
-                <span class="rating">
-                    ★ 4.8
-                </span>
-
-            </div>
-
-
-            <div class="performance-row">
-
-                <span class="worker-name">
-                    <b>03</b>
-                    Suresh Kumar
-                </span>
-
-                <span>
-                    76
-                </span>
-
-                <span>
-                    2.2 hrs
-                </span>
-
-                <span class="rating">
-                    ★ 4.7
-                </span>
-
-            </div>
-
         </div>
 
     </section>
@@ -783,58 +591,83 @@
 
 
 <script>
+async function loadAdminReports() {
+    try {
+        const response = await fetch("/api/admin/reports");
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || "Unable to load reports.");
 
-function logoutAdmin() {
+        const categories = data.categories || [];
+        const totalCategories = categories.reduce((sum, item) => sum + Number(item.count || 0), 0);
+        const list = document.getElementById("adminCategoryList");
+        if (list) {
+            list.innerHTML = categories.length ? categories.map(item => {
+                const pct = totalCategories ? ((Number(item.count || 0) / totalCategories) * 100).toFixed(1) : "0.0";
+                return `<div class="category-item">
+                    <div class="category-title"><span>${escapeHtml(item.issue_type || "Other")}</span><strong>${pct}%</strong></div>
+                    <div class="category-track"><div style="width:${pct}%;"></div></div>
+                </div>`;
+            }).join("") : `<p>No complaint data available.</p>`;
+        }
 
-    if (
-        confirm(
-            "Are you sure you want to logout?"
-        )
-    ) {
+        const statuses = data.statuses || [];
+        const total = statuses.reduce((sum, x) => sum + Number(x.count || 0), 0);
+        const resolved = statuses.filter(x => x.status === "Resolved").reduce((sum,x)=>sum+Number(x.count||0),0);
+        const active = statuses.filter(x => ["Pending","Assigned","In Progress"].includes(x.status)).reduce((sum,x)=>sum+Number(x.count||0),0);
 
-        window.location.href =
-            "/admin-login";
+        const totalEl=document.getElementById("adminTotal");
+        const resolvedEl=document.getElementById("adminResolved");
+        const activeEl=document.getElementById("adminActiveWorkers");
+        if(totalEl) totalEl.textContent=total;
+        if(resolvedEl) resolvedEl.textContent=resolved;
+        if(activeEl) activeEl.textContent="Loading...";
+        const avgEl=document.getElementById("adminAvgTime");
+        if(avgEl) avgEl.textContent="—";
 
+        const perf = document.getElementById("adminPerformanceTable");
+        if (perf) {
+            const workersResponse = await fetch("/api/admin/workers");
+            const workers = workersResponse.ok ? await workersResponse.json() : [];
+            if(activeEl) activeEl.textContent = workers.filter(w => w.status === "Available" || w.status === "Busy").length;
+            const complaintResponse = await fetch("/api/admin/complaints");
+            const complaints = complaintResponse.ok ? await complaintResponse.json() : [];
+
+            const rows = workers.map(w => {
+                const mine = complaints.filter(c => c.worker_id === w.worker_id || c.worker_name === w.name);
+                const done = mine.filter(c => c.status === "Resolved").length;
+                const activeCount = mine.filter(c => ["Assigned","In Progress"].includes(c.status)).length;
+                const efficiency = mine.length ? Math.round(done / mine.length * 100) : 0;
+                return {w,done,activeCount,efficiency};
+            }).filter(x => x.mine !== undefined || x.done > 0 || x.activeCount > 0)
+              .sort((a,b)=>b.done-a.done)
+              .slice(0,5);
+
+            perf.innerHTML = `<div class="performance-row header"><span>Worker</span><span>Resolved</span><span>Active</span><span>Efficiency</span></div>` +
+                (rows.length ? rows.map((x,i)=>`<div class="performance-row">
+                    <span class="worker-name"><b>${String(i+1).padStart(2,"0")}</b> ${escapeHtml(x.w.name)}</span>
+                    <span>${x.done}</span><span>${x.activeCount}</span><span>${x.efficiency}%</span>
+                </div>`).join("") : `<div class="performance-row"><span>No worker activity yet.</span></div>`);
+        }
+    } catch (error) {
+        console.error("Admin reports:", error);
     }
-
 }
-
-
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch]));
+}
+function logoutAdmin() {
+    if (confirm("Are you sure you want to logout?")) window.location.href="/admin-logout";
+}
 function generateReport() {
-
-    const button =
-        document.querySelector(
-            ".generate-btn"
-        );
-
-    button.innerHTML =
-        "Generating...";
-
-    setTimeout(function() {
-
-        button.innerHTML =
-            "✓ Report Generated";
-
-        setTimeout(function() {
-
-            button.innerHTML =
-                "Generate Report";
-
-        }, 1500);
-
-    }, 900);
-
+    const button=document.querySelector(".generate-btn");
+    if (!button) return;
+    button.textContent="Generating...";
+    setTimeout(()=>button.textContent="✓ Report Generated",700);
 }
-
-
 function downloadReport() {
-
-    alert(
-        "Report download will be connected to the Python backend."
-    );
-
+    window.location.href="/admin-reports/download";
 }
-
+loadAdminReports();
 </script>
 
 
