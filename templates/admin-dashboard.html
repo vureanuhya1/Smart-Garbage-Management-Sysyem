@@ -50,6 +50,7 @@
     <nav>
 
         <ul class="nav-links">
+           <li><a href="/admin-profile">Profile</a></li> 
 
             <li>
                 <a href="/admin-dashboard"
@@ -161,8 +162,8 @@
                 TODAY
             </span>
 
-            <strong>
-                21 August 2026
+            <strong id="currentDate">
+               
             </strong>
 
         </div>
@@ -837,7 +838,7 @@ document
             ) {
 
                 window.location.href =
-                    "/admin-login";
+                    "/admin-logout";
 
             }
 
@@ -869,10 +870,28 @@ document
 
         }
     );
-
+function showCurrentDate() {
+    const today = new Date();
+    const options = {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    };
+    document.getElementById(
+        "currentDate"
+).textContent = today.toLocaleDateString(
+    "en-IN",
+    options
+);
+    
+}
+showCurrentDate();
 </script>
 
 
+<script>
+(async()=>{try{const r=await fetch('/api/admin/stats');const d=await r.json();if(!r.ok)return;const vals=document.querySelectorAll('.admin-stat-card .stat-content strong');if(vals[0])vals[0].textContent=d.total;if(vals[1])vals[1].textContent=d.pending;if(vals[2])vals[2].textContent=d.resolved;if(vals[3])vals[3].textContent=d.workers;const name=document.querySelector('.dashboard-header h1');if(name)name.textContent=`Good morning, {{ user.name }} 👋`;document.getElementById('currentDate').textContent=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});}catch(e){}})();
+</script>
 </body>
 
 </html>
