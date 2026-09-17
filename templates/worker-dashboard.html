@@ -48,6 +48,8 @@
     <nav>
 
         <ul class="nav-links">
+             <li><a href="/worker-profile">Profile</a>
+</li>
 
             <li>
                 <a href="/worker-dashboard"
@@ -61,7 +63,7 @@
                     Complaints
                 </a>
             </li>
-
+            
             <li>
                 <a href="/worker-reports">
                     Reports
@@ -91,14 +93,14 @@
         </button>
 
 
-        <button
-            id="logoutButton"
-            class="logout-button"
-        >
-
-            Logout
-
-        </button>
+       
+      <a
+    href="{{ url_for('worker_logout') }}"
+    class="logout-button"
+    onclick="return confirm('Are you sure you want to logout?');">
+    Logout
+</a>
+   
 
     </div>
 
@@ -445,11 +447,8 @@
 
             </a>
 
-
-            <button
-                id="profileQuickButton"
-                class="quick-card"
-            >
+<a href="/worker-profile"
+class="quick-card">
 
                 <div>
                     👤
@@ -463,7 +462,7 @@
                     View worker information
                 </span>
 
-            </button>
+            </a>
 
 
         </div>
