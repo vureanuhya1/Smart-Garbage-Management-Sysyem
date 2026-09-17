@@ -1,328 +1,327 @@
-/* =====================================================
-   SMARTCLEAN — WORKER LOGIN JAVASCRIPT
-===================================================== */
-
 document.addEventListener("DOMContentLoaded", function () {
 
-    const loginForm =
-        document.getElementById("workerLoginForm");
+    // ============================================================
+    // GET HTML ELEMENTS
+    // ============================================================
 
-    const workerId =
-        document.getElementById("workerId");
-
-    const password =
-        document.getElementById("workerPassword");
-
-    const togglePassword =
-        document.getElementById("togglePassword");
-
-    const forgotPassword =
-        document.getElementById("forgotPassword");
-
-    const loginMessage =
-        document.getElementById("loginMessage");
+    const loginForm = document.getElementById("workerLoginForm");
+    const workerIdInput = document.getElementById("workerId");
+    const passwordInput = document.getElementById("workerPassword");
+    const togglePasswordButton = document.getElementById("togglePassword");
+    const rememberMeInput = document.getElementById("rememberMe");
+    const loginMessage = document.getElementById("loginMessage");
 
 
-    /* =================================================
-       SHOW / HIDE PASSWORD
-    ================================================= */
+    // ============================================================
+    // PASSWORD SHOW / HIDE
+    // ============================================================
 
-    if (togglePassword) {
+    if (togglePasswordButton && passwordInput) {
 
-        togglePassword.addEventListener(
-            "click",
-            function () {
+        togglePasswordButton.addEventListener("click", function () {
 
-                if (password.type === "password") {
+            if (passwordInput.type === "password") {
 
-                    password.type = "text";
+                passwordInput.type = "text";
 
-                    togglePassword.textContent = "🙈";
+                togglePasswordButton.textContent = "🙈";
 
-                    togglePassword.setAttribute(
-                        "aria-label",
-                        "Hide password"
-                    );
+                togglePasswordButton.setAttribute(
+                    "aria-label",
+                    "Hide password"
+                );
 
-                } else {
+            } else {
 
-                    password.type = "password";
+                passwordInput.type = "password";
 
-                    togglePassword.textContent = "👁";
+                togglePasswordButton.textContent = "👁";
 
-                    togglePassword.setAttribute(
-                        "aria-label",
-                        "Show password"
-                    );
-
-                }
-
+                togglePasswordButton.setAttribute(
+                    "aria-label",
+                    "Show password"
+                );
             }
-        );
 
+        });
     }
 
 
-    /* =================================================
-       DISPLAY MESSAGE
-    ================================================= */
+    // ============================================================
+    // SHOW LOGIN MESSAGE
+    // ============================================================
 
-    function showMessage(message, type) {
+    function showMessage(message, type = "error") {
+
+        if (!loginMessage) {
+            return;
+        }
 
         loginMessage.textContent = message;
 
         loginMessage.className =
             "login-message show " + type;
 
+        loginMessage.style.display = "block";
     }
 
 
-    /* =================================================
-       LOGIN FORM
-    ================================================= */
+    // ============================================================
+    // CLEAR LOGIN MESSAGE
+    // ============================================================
 
-    if (loginForm) {
+    function clearMessage() {
 
-        loginForm.addEventListener(
-            "submit",
-            async function (event) {
+        if (!loginMessage) {
+            return;
+        }
 
-                event.preventDefault();
+        loginMessage.textContent = "";
 
+        loginMessage.className = "login-message";
 
-                const id =
-                    workerId.value.trim();
+        loginMessage.style.display = "none";
+    }
 
-                const pass =
-                    password.value.trim();
 
+    // ============================================================
+    // FORM CHECK
+    // ============================================================
 
-                /* -----------------------------------------
-                   BASIC VALIDATION
-                ----------------------------------------- */
+    if (!loginForm) {
+        console.error("Worker login form not found.");
+        return;
+    }
 
-                if (!id) {
 
-                    showMessage(
-                        "Please enter your Worker ID.",
-                        "error"
-                    );
+    // ============================================================
+    // LOGIN SUBMIT
+    // ============================================================
 
-                    workerId.focus();
+    loginForm.addEventListener("submit", async function (event) {
 
-                    return;
+        event.preventDefault();
 
-                }
+        clearMessage();
 
 
-                if (!pass) {
+        // --------------------------------------------------------
+        // GET VALUES
+        // --------------------------------------------------------
 
-                    showMessage(
-                        "Please enter your password.",
-                        "error"
-                    );
+        const workerId =
+            workerIdInput
+                ? workerIdInput.value.trim()
+                : "";
 
-                    password.focus();
+        const password =
+            passwordInput
+                ? passwordInput.value
+                : "";
 
-                    return;
+        const rememberMe =
+            rememberMeInput
+                ? rememberMeInput.checked
+                : false;
 
-                }
 
+        // --------------------------------------------------------
+        // VALIDATION
+        // --------------------------------------------------------
 
-                /* -----------------------------------------
-                   BUTTON LOADING STATE
-                ----------------------------------------- */
+        if (!workerId) {
 
-                const loginButton =
-                    loginForm.querySelector(
-                        ".worker-login-button"
-                    );
+            showMessage(
+                "Please enter your Worker ID.",
+                "error"
+            );
 
-
-                const originalText =
-                    loginButton.innerHTML;
-
-
-                loginButton.disabled = true;
-
-                loginButton.innerHTML =
-                    `<span>Signing in...</span> <strong>⏳</strong>`;
-
-
-                try {
-
-                    /* =====================================
-                       SEND LOGIN DATA TO FLASK
-                    ===================================== */
-
-                    const response =
-                        await fetch(
-                            "/worker-login",
-                            {
-                                method: "POST",
-
-                                headers: {
-                                    "Content-Type":
-                                        "application/json"
-                                },
-
-                                body: JSON.stringify({
-
-                                    workerId: id,
-
-                                    password: pass
-
-                                })
-
-                            }
-                        );
-
-
-                    const data =
-                        await response.json();
-
-
-                    /* =====================================
-                       SUCCESS
-                    ===================================== */
-
-                    if (response.ok && data.success) {
-
-                        showMessage(
-                            "Login successful! Redirecting...",
-                            "success"
-                        );
-
-
-                        setTimeout(
-                            function () {
-
-                                window.location.href =
-                                    "/worker-dashboard";
-
-                            },
-                            700
-                        );
-
-                    }
-
-
-                    /* =====================================
-                       LOGIN FAILED
-                    ===================================== */
-
-                    else {
-
-                        showMessage(
-                            data.message ||
-                            "Invalid Worker ID or password.",
-                            "error"
-                        );
-
-                        loginButton.disabled = false;
-
-                        loginButton.innerHTML =
-                            originalText;
-
-                    }
-
-                }
-
-
-                /* =========================================
-                   SERVER / NETWORK ERROR
-                ========================================= */
-
-                catch (error) {
-
-                    console.error(
-                        "Worker login error:",
-                        error
-                    );
-
-
-                    showMessage(
-                        "Unable to connect to the server. Please try again.",
-                        "error"
-                    );
-
-
-                    loginButton.disabled = false;
-
-                    loginButton.innerHTML =
-                        originalText;
-
-                }
-
+            if (workerIdInput) {
+                workerIdInput.focus();
             }
-        );
 
-    }
+            return;
+        }
 
 
-    /* =================================================
-       FORGOT PASSWORD
-    ================================================= */
+        if (!password) {
 
-    if (forgotPassword) {
+            showMessage(
+                "Please enter your password.",
+                "error"
+            );
 
-        forgotPassword.addEventListener(
-            "click",
-            function (event) {
+            if (passwordInput) {
+                passwordInput.focus();
+            }
 
-                event.preventDefault();
+            return;
+        }
 
+
+        // --------------------------------------------------------
+        // LOGIN BUTTON
+        // --------------------------------------------------------
+
+        const loginButton =
+            loginForm.querySelector(
+                "button[type='submit']"
+            );
+
+        let originalButtonHTML = "";
+
+        if (loginButton) {
+
+            originalButtonHTML =
+                loginButton.innerHTML;
+
+            loginButton.disabled = true;
+
+            loginButton.innerHTML =
+                "<span>LOGGING IN...</span><strong>⏳</strong>";
+        }
+
+
+        // ========================================================
+        // SEND LOGIN REQUEST
+        // ========================================================
+
+        try {
+
+            const response = await fetch(
+                "/worker-login",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        "Accept":
+                            "application/json",
+
+                        "X-Requested-With":
+                            "XMLHttpRequest"
+                    },
+
+                    credentials: "same-origin",
+
+                    body: JSON.stringify({
+
+                        workerId: workerId,
+
+                        password: password,
+
+                        remember: rememberMe
+
+                    })
+                }
+            );
+
+
+            // ----------------------------------------------------
+            // READ RESPONSE
+            // ----------------------------------------------------
+
+            const contentType =
+                response.headers.get(
+                    "content-type"
+                ) || "";
+
+
+            let data;
+
+
+            if (
+                contentType.includes(
+                    "application/json"
+                )
+            ) {
+
+                data = await response.json();
+
+            } else {
+
+                const text =
+                    await response.text();
+
+                data = {
+                    success: response.ok,
+                    message: text
+                };
+            }
+
+
+            // ====================================================
+            // SUCCESS
+            // ====================================================
+
+            if (
+                response.ok &&
+                data &&
+                data.success
+            ) {
 
                 showMessage(
-                    "Please contact the municipal administrator to reset your password.",
-                    "error"
+                    "Login successful. Redirecting...",
+                    "success"
                 );
 
+
+                // Small delay so user can see success
+                setTimeout(function () {
+
+                    window.location.href =
+                        data.redirect ||
+                        "/worker-dashboard";
+
+                }, 300);
+
+
+                return;
             }
-        );
-
-    }
 
 
-    /* =================================================
-       REMOVE ERROR MESSAGE WHEN USER TYPES
-    ================================================= */
+            // ====================================================
+            // LOGIN FAILED
+            // ====================================================
 
-    if (workerId) {
+            showMessage(
 
-        workerId.addEventListener(
-            "input",
-            function () {
+                data.message ||
+                data.error ||
+                "Invalid Worker ID or password.",
 
-                if (loginMessage) {
+                "error"
 
-                    loginMessage.className =
-                        "login-message";
+            );
 
-                }
 
+        } catch (error) {
+
+            console.error(
+                "Worker login error:",
+                error
+            );
+
+
+            showMessage(
+                "Unable to connect to the server. Please try again.",
+                "error"
+            );
+
+
+        } finally {
+
+            if (loginButton) {
+
+                loginButton.disabled = false;
+
+                loginButton.innerHTML =
+                    originalButtonHTML;
             }
-        );
+        }
 
-    }
-
-
-    if (password) {
-
-        password.addEventListener(
-            "input",
-            function () {
-
-                if (loginMessage) {
-
-                    loginMessage.className =
-                        "login-message";
-
-                }
-
-            }
-        );
-
-    }
+    });
 
 });
