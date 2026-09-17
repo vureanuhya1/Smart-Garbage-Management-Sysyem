@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Worker Profile | SmartClean</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/common.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/worker-profile.css') }}">
+
+</head>
+
+<body>
+
+
+<header class="navbar">
+
+    <a href="/worker-dashboard"
+       class="logo">
+
+        <div class="logo-icon">
+            ♻
+        </div>
+
+        <div class="logo-text">
+
+            <h2>
+                SmartClean
+            </h2>
+
+            <p>
+                Smart Garbage Management
+            </p>
+
+        </div>
+
+    </a>
+
+
+    <nav>
+
+        <div class="nav-links">
+
+            <a href="/worker-profile"
+               class="active">
+
+                Profile
+
+            </a>
+
+            <a href="/worker-dashboard">
+
+                Dashboard
+
+            </a>
+
+            <a href="/worker-complaints">
+
+                Complaints
+
+            </a>
+
+            <a href="/worker-reports">
+
+                Reports
+
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <div class="worker-nav">
+
+        <div class="worker-user">
+
+            <span class="worker-avatar-small">
+                👷
+            </span>
+
+            <div class="worker-user-info">
+
+                <strong>
+                    {{ user.name }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="worker-logout"
+            onclick="window.location.href='/worker-logout'">
+
+            Logout
+
+        </button>
+
+    </div>
+
+</header>
+
+
+<main class="worker-profile-container">
+
+
+    <div class="worker-page-heading">
+
+        <p class="worker-small-title">
+            WORKER PORTAL
+        </p>
+
+        <h1>
+            Worker Profile
+        </h1>
+
+        <p class="worker-subtitle">
+            Manage your account information and settings.
+        </p>
+
+    </div>
+
+
+    <section class="worker-profile-card">
+
+        <div class="worker-profile-header">
+
+
+            <div class="worker-profile-avatar">
+                {{ user.name[0]|upper }}
+            </div>
+
+
+            <div class="worker-profile-title">
+
+                <h2 id="workerProfileName">
+
+                    {{ user.name }}
+
+                </h2>
+
+                <p>
+                    Field Worker
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="worker-edit-btn"
+                id="workerEditBtn">
+
+                ✎ Edit Profile
+
+            </button>
+
+        </div>
+
+
+        <div class="worker-profile-details">
+
+
+            <div class="worker-detail-box">
+
+                <span class="worker-detail-label">
+                    Full Name
+                </span>
+
+                <span
+                    class="worker-detail-value"
+                    id="workerDisplayName">
+
+                    {{ user.name }}
+
+                </span>
+
+            </div>
+
+
+            <div class="worker-detail-box">
+
+                <span class="worker-detail-label">
+                    Worker ID
+                </span>
+
+                <span class="worker-detail-value">
+
+                    WRK-{{ "%04d"|format(user.worker_id) }}
+
+                </span>
+
+            </div>
+
+
+            <div class="worker-detail-box">
+
+                <span class="worker-detail-label">
+                    Email Address
+                </span>
+
+                <span
+                    class="worker-detail-value"
+                    id="workerDisplayEmail">
+
+                    {{ user.email }}
+
+                </span>
+
+            </div>
+
+
+            <div class="worker-detail-box">
+
+                <span class="worker-detail-label">
+                    Phone Number
+                </span>
+
+                <span
+                    class="worker-detail-value"
+                    id="workerDisplayPhone">
+
+                    {{ user.phone }}
+
+                </span>
+
+            </div>
+
+
+            <div class="worker-detail-box">
+
+                <span class="worker-detail-label">
+                    Role
+                </span>
+
+                <span class="worker-detail-value">
+
+                    Field Worker
+
+                </span>
+
+            </div>
+
+
+            <div class="worker-detail-box">
+
+                <span class="worker-detail-label">
+                    Assigned Area
+                </span>
+
+                <span class="worker-detail-value">
+
+                    {{ user.address or "Not specified" }}
+
+                </span>
+
+            </div>
+
+
+            <div class="worker-detail-box">
+
+                <span class="worker-detail-label">
+                    Account Status
+                </span>
+
+                <span class="worker-status">
+
+                    ● Active
+
+                </span>
+
+            </div>
+
+
+            <div class="worker-detail-box">
+
+                <span class="worker-detail-label">
+                    Availability
+                </span>
+
+                <span class="worker-status">
+
+                    ● {{ user.status or "Available" }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="worker-settings-card">
+
+
+        <div class="worker-settings-heading">
+
+            <div class="worker-settings-icon">
+                ⚙
+            </div>
+
+            <div>
+
+                <h2>
+                    Settings
+                </h2>
+
+                <p>
+                    Manage your account security and preferences.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="worker-setting-row">
+
+            <div class="worker-setting-info">
+
+                <h3>
+                    Password & Security
+                </h3>
+
+                <p>
+                    Change your password or recover your account.
+                </p>
+
+            </div>
+
+
+            <button
+                class="worker-setting-btn"
+                onclick="window.location.href='/forgot-password'">
+
+                Change Password
+
+            </button>
+
+        </div>
+
+
+        <div class="worker-setting-row">
+
+            <div class="worker-setting-info">
+
+                <h3>
+                    Notifications
+                </h3>
+
+                <p>
+                    Manage notifications related to complaints and assigned tasks.
+                </p>
+
+            </div>
+
+
+            <label class="worker-switch">
+
+                <input type="checkbox" checked>
+
+                <span class="worker-slider"></span>
+
+            </label>
+
+        </div>
+
+
+        <div class="worker-setting-row">
+
+            <div class="worker-setting-info">
+
+                <h3>
+                    Account Security
+                </h3>
+
+                <p>
+                    Your worker account is protected by authentication.
+                </p>
+
+            </div>
+
+
+            <span class="worker-security-status">
+
+                Protected
+
+            </span>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="footer">
+
+    <div>
+
+        <strong>
+            ♻ SmartClean
+        </strong>
+
+        <p>
+            Smart Garbage Management System
+        </p>
+
+    </div>
+
+
+    <div>
+        © 2026 SmartClean · Team 4
+    </div>
+
+</footer>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const editBtn =
+        document.getElementById("workerEditBtn");
+
+
+    if (!editBtn) {
+        return;
+    }
+
+
+    editBtn.addEventListener("click", async function () {
+
+
+        const currentName =
+            {{ user.name|tojson }};
+
+
+        const currentPhone =
+            {{ user.phone|tojson }};
+
+
+        const currentEmail =
+            {{ user.email|tojson }};
+
+
+        const name = prompt(
+            "Enter your full name:",
+            currentName
+        );
+
+
+        if (name === null) {
+            return;
+        }
+
+
+        const trimmedName =
+            name.trim();
+
+
+        if (!trimmedName) {
+
+            alert(
+                "Name cannot be empty."
+            );
+
+            return;
+
+        }
+
+
+        const phone = prompt(
+            "Enter your phone number:",
+            currentPhone
+        );
+
+
+        if (phone === null) {
+            return;
+        }
+
+
+        const trimmedPhone =
+            phone.trim();
+
+
+        if (!trimmedPhone) {
+
+            alert(
+                "Phone number cannot be empty."
+            );
+
+            return;
+
+        }
+
+
+        const email = prompt(
+            "Enter your email address:",
+            currentEmail
+        );
+
+
+        if (email === null) {
+            return;
+        }
+
+
+        const trimmedEmail =
+            email.trim();
+
+
+        if (!trimmedEmail) {
+
+            alert(
+                "Email cannot be empty."
+            );
+
+            return;
+
+        }
+
+
+        const payload = {
+
+            name: trimmedName,
+
+            phone: trimmedPhone,
+
+            email: trimmedEmail
+
+        };
+
+
+        try {
+
+
+            const response = await fetch(
+                "/api/profile/update",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(payload)
+                }
+            );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok ||
+                !data.success) {
+
+                alert(
+                    data.message ||
+                    "Profile update failed."
+                );
+
+                return;
+
+            }
+
+
+            alert(
+                "Profile updated successfully!"
+            );
+
+
+            window.location.reload();
+
+        }
+
+
+        catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Unable to update profile. Please try again."
+            );
+
+        }
+
+    });
+
+});
+
+</script>
+
+</body>
+
+</html>

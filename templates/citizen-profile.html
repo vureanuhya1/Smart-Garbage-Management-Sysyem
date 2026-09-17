@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Citizen Profile | SmartClean</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/common.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/citizen-profile.css') }}">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <a href="/" class="logo">
+
+        <div class="logo-icon">
+            ♻
+        </div>
+
+        <div class="logo-text">
+
+            <h2>SmartClean</h2>
+
+            <p>
+                Smart Garbage Management
+            </p>
+
+        </div>
+
+    </a>
+
+    <nav>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/">
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a href="/report-issue">
+                    Report Issue
+                </a>
+            </li>
+
+            <li>
+                <a href="/track">
+                    Track Complaint
+                </a>
+            </li>
+
+            <li>
+                <a href="/#about">
+                    About
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+    <div class="nav-buttons">
+
+        <a href="/citizen-dashboard"
+           class="btn-login dashboard-btn">
+
+            Dashboard
+
+        </a>
+
+        <a href="/logout"
+           class="btn-register">
+
+            Logout
+
+        </a>
+
+    </div>
+
+</header>
+
+
+<main class="citizen-profile-container">
+
+    <div class="citizen-page-heading">
+
+        <p class="citizen-small-title">
+            CITIZEN PORTAL
+        </p>
+
+        <h1>
+            My Profile
+        </h1>
+
+        <p class="citizen-subtitle">
+            Manage your account information and settings.
+        </p>
+
+    </div>
+
+
+    <section class="citizen-profile-card">
+
+        <div class="citizen-profile-header">
+
+            <div class="citizen-profile-avatar">
+                {{ user.name[0]|upper }}
+            </div>
+
+            <div class="citizen-profile-title">
+
+                <h2 id="profileName">
+                    {{ user.name }}
+                </h2>
+
+                <p>
+                    Registered Citizen
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                class="citizen-edit-btn"
+                id="citizenEditBtn">
+
+                ✎ Edit Profile
+
+            </button>
+
+        </div>
+
+
+        <div class="citizen-profile-details">
+
+            <div class="citizen-detail-box">
+
+                <span class="citizen-detail-label">
+                    Full Name
+                </span>
+
+                <span class="citizen-detail-value"
+                      id="displayName">
+
+                    {{ user.name }}
+
+                </span>
+
+            </div>
+
+
+            <div class="citizen-detail-box">
+
+                <span class="citizen-detail-label">
+                    Email Address
+                </span>
+
+                <span class="citizen-detail-value"
+                      id="displayEmail">
+
+                    {{ user.email }}
+
+                </span>
+
+            </div>
+
+
+            <div class="citizen-detail-box">
+
+                <span class="citizen-detail-label">
+                    Phone Number
+                </span>
+
+                <span class="citizen-detail-value"
+                      id="displayPhone">
+
+                    {{ user.phone }}
+
+                </span>
+
+            </div>
+
+
+            <div class="citizen-detail-box">
+
+                <span class="citizen-detail-label">
+                    Location
+                </span>
+
+                <span class="citizen-detail-value">
+
+                    Ward {{ user.ward_number }}
+
+                </span>
+
+            </div>
+
+
+            <div class="citizen-detail-box">
+
+                <span class="citizen-detail-label">
+                    Role
+                </span>
+
+                <span class="citizen-detail-value">
+                    Citizen
+                </span>
+
+            </div>
+
+
+            <div class="citizen-detail-box">
+
+                <span class="citizen-detail-label">
+                    Account Status
+                </span>
+
+                <span class="citizen-status">
+                    ● Active
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="citizen-settings-card" style="margin-top:24px;">
+        <div class="citizen-settings-heading">
+            <div class="citizen-settings-icon">🗂️</div>
+            <div>
+                <h2>My Complaints</h2>
+                <p>Complaint IDs submitted from your citizen account.</p>
+            </div>
+        </div>
+        {% if complaints %}
+            <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left;padding:12px;">Complaint ID</th>
+                            <th style="text-align:left;padding:12px;">Issue</th>
+                            <th style="text-align:left;padding:12px;">Location</th>
+                            <th style="text-align:left;padding:12px;">Date</th>
+                            <th style="text-align:left;padding:12px;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for complaint in complaints %}
+                        <tr>
+                            <td style="padding:12px;"><strong>{{ complaint.id }}</strong></td>
+                            <td style="padding:12px;">{{ complaint.issue_type }}</td>
+                            <td style="padding:12px;">{{ complaint.location }}</td>
+                            <td style="padding:12px;">{{ complaint.date }}</td>
+                            <td style="padding:12px;">{{ complaint.status }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p style="padding:12px 0;">No complaints submitted yet.</p>
+        {% endif %}
+    </section>
+
+
+    <section class="citizen-settings-card">
+
+        <div class="citizen-settings-heading">
+
+            <div class="citizen-settings-icon">
+                ⚙
+            </div>
+
+            <div>
+
+                <h2>
+                    Settings
+                </h2>
+
+                <p>
+                    Manage your account security and preferences.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="citizen-setting-row">
+
+            <div class="citizen-setting-info">
+
+                <h3>
+                    Password & Security
+                </h3>
+
+                <p>
+                    Change your password or recover your account.
+                </p>
+
+            </div>
+
+            <button
+                class="citizen-setting-btn"
+                onclick="window.location.href='/forgot-password'">
+
+                Change Password
+
+            </button>
+
+        </div>
+
+
+        <div class="citizen-setting-row">
+
+            <div class="citizen-setting-info">
+
+                <h3>
+                    Notifications
+                </h3>
+
+                <p>
+                    Manage notifications related to your complaints.
+                </p>
+
+            </div>
+
+            <label class="citizen-switch">
+
+                <input type="checkbox" checked>
+
+                <span class="citizen-slider"></span>
+
+            </label>
+
+        </div>
+
+
+        <div class="citizen-setting-row">
+
+            <div class="citizen-setting-info">
+
+                <h3>
+                    Account Security
+                </h3>
+
+                <p>
+                    Your citizen account is protected by authentication.
+                </p>
+
+            </div>
+
+            <span class="citizen-security-status">
+                Protected
+            </span>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="footer">
+
+    <div>
+
+        <strong>
+            ♻ SmartClean
+        </strong>
+
+        <p>
+            Smart Garbage Management System
+        </p>
+
+    </div>
+
+    <div>
+
+        © 2026 SmartClean · Team 4
+
+    </div>
+
+</footer>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const editBtn = document.getElementById("citizenEditBtn");
+
+    if (!editBtn) {
+        return;
+    }
+
+    editBtn.addEventListener("click", async function () {
+
+        const currentName = {{ user.name|tojson }};
+        const currentPhone = {{ user.phone|tojson }};
+        const currentEmail = {{ user.email|tojson }};
+
+        const name = prompt(
+            "Enter your full name:",
+            currentName
+        );
+
+        if (name === null) {
+            return;
+        }
+
+        const trimmedName = name.trim();
+
+        if (!trimmedName) {
+            alert("Name cannot be empty.");
+            return;
+        }
+
+
+        const phone = prompt(
+            "Enter your phone number:",
+            currentPhone
+        );
+
+        if (phone === null) {
+            return;
+        }
+
+        const trimmedPhone = phone.trim();
+
+        if (!trimmedPhone) {
+            alert("Phone number cannot be empty.");
+            return;
+        }
+
+
+        const email = prompt(
+            "Enter your email address:",
+            currentEmail
+        );
+
+        if (email === null) {
+            return;
+        }
+
+        const trimmedEmail = email.trim();
+
+        if (!trimmedEmail) {
+            alert("Email cannot be empty.");
+            return;
+        }
+
+
+        const payload = {
+
+            name: trimmedName,
+
+            phone: trimmedPhone,
+
+            email: trimmedEmail
+
+        };
+
+
+        try {
+
+            const response = await fetch(
+                "/api/profile/update",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(payload)
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            if (!response.ok || !data.success) {
+
+                alert(
+                    data.message ||
+                    "Profile update failed."
+                );
+
+                return;
+            }
+
+
+            alert(
+                "Profile updated successfully!"
+            );
+
+
+            window.location.reload();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Unable to update profile. Please check your connection and try again."
+            );
+
+        }
+
+    });
+
+});
+
+</script>
+
+</body>
+
+</html>

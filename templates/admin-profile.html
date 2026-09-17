@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Profile | SmartClean</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/common.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/admin-profile.css') }}">
+
+</head>
+
+<body>
+
+
+<header class="navbar">
+
+
+    <a href="/" class="logo">
+
+        <div class="logo-icon">
+            ♻
+        </div>
+
+        <div class="logo-text">
+
+            <h2>
+                SmartClean
+            </h2>
+
+            <p>
+                Smart Garbage Management
+            </p>
+
+        </div>
+
+    </a>
+
+
+    <nav>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/admin-profile"
+                   class="active">
+
+                    Profile
+
+                </a>
+            </li>
+
+
+            <li>
+                <a href="/admin-dashboard">
+
+                    Dashboard
+
+                </a>
+            </li>
+
+
+            <li>
+                <a href="/admin-complaints">
+
+                    Complaints
+
+                </a>
+            </li>
+
+
+            <li>
+                <a href="/admin-workers">
+
+                    Workers
+
+                </a>
+            </li>
+
+
+            <li>
+                <a href="/admin-reports">
+
+                    Reports
+
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <div class="admin-nav">
+
+        <div class="admin-profile">
+
+            <span class="admin-avatar-small">
+                🛡️
+            </span>
+
+            <div>
+
+                <strong>
+                    {{ user.name }}
+                </strong>
+
+                <span>
+                    Administrator
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="admin-logout"
+            id="logoutButton">
+
+            Logout
+
+        </button>
+
+    </div>
+
+</header>
+
+
+<main class="admin-profile-container">
+
+
+    <div class="admin-page-heading">
+
+        <p class="admin-small-title">
+            ADMINISTRATOR
+        </p>
+
+        <h1>
+            Admin Profile
+        </h1>
+
+        <p class="admin-subtitle">
+            Manage your account information and settings.
+        </p>
+
+    </div>
+
+
+    <section class="admin-profile-card">
+
+
+        <div class="admin-profile-header">
+
+
+            <div class="admin-profile-avatar">
+
+                {{ user.name[0]|upper }}
+
+            </div>
+
+
+            <div class="admin-profile-title">
+
+                <h2 id="adminProfileName">
+
+                    {{ user.name }}
+
+                </h2>
+
+                <p>
+                    Administrator
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="admin-edit-btn"
+                id="adminEditBtn">
+
+                ✎ Edit Profile
+
+            </button>
+
+        </div>
+
+
+        <div class="admin-profile-details">
+
+
+            <div class="admin-detail-box">
+
+                <span class="admin-detail-label">
+                    Full Name
+                </span>
+
+                <span
+                    class="admin-detail-value"
+                    id="adminDisplayName">
+
+                    {{ user.name }}
+
+                </span>
+
+            </div>
+
+
+            <div class="admin-detail-box">
+
+                <span class="admin-detail-label">
+                    Email Address
+                </span>
+
+                <span
+                    class="admin-detail-value"
+                    id="adminDisplayEmail">
+
+                    {{ user.email }}
+
+                </span>
+
+            </div>
+
+
+            <div class="admin-detail-box">
+
+                <span class="admin-detail-label">
+                    Phone Number
+                </span>
+
+                <span
+                    class="admin-detail-value"
+                    id="adminDisplayPhone">
+
+                    {{ user.phone or "Not specified" }}
+
+                </span>
+
+            </div>
+
+
+            <div class="admin-detail-box">
+
+                <span class="admin-detail-label">
+                    Role
+                </span>
+
+                <span class="admin-detail-value">
+
+                    Administrator
+
+                </span>
+
+            </div>
+
+
+            <div class="admin-detail-box">
+
+                <span class="admin-detail-label">
+                    Department
+                </span>
+
+                <span class="admin-detail-value">
+
+                    SmartClean Administration
+
+                </span>
+
+            </div>
+
+
+            <div class="admin-detail-box">
+
+                <span class="admin-detail-label">
+                    Account Status
+                </span>
+
+                <span class="admin-status">
+
+                    ● Active
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="admin-settings-card">
+
+
+        <div class="admin-settings-heading">
+
+            <div class="admin-settings-icon">
+                ⚙
+            </div>
+
+            <div>
+
+                <h2>
+                    Settings
+                </h2>
+
+                <p>
+                    Manage your account security and preferences.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-setting-row">
+
+            <div class="admin-setting-info">
+
+                <h3>
+                    Password & Security
+                </h3>
+
+                <p>
+                    Change your password or recover your account.
+                </p>
+
+            </div>
+
+
+            <button
+                class="admin-setting-btn"
+                onclick="window.location.href='/forgot-password'">
+
+                Change Password
+
+            </button>
+
+        </div>
+
+
+        <div class="admin-setting-row">
+
+            <div class="admin-setting-info">
+
+                <h3>
+                    Notifications
+                </h3>
+
+                <p>
+                    Manage notifications related to your account.
+                </p>
+
+            </div>
+
+
+            <label class="admin-switch">
+
+                <input type="checkbox" checked>
+
+                <span class="admin-slider"></span>
+
+            </label>
+
+        </div>
+
+
+        <div class="admin-setting-row">
+
+            <div class="admin-setting-info">
+
+                <h3>
+                    Account Security
+                </h3>
+
+                <p>
+                    Your administrator account is protected.
+                </p>
+
+            </div>
+
+
+            <span class="admin-security-status">
+
+                Protected
+
+            </span>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="footer">
+
+    <div>
+
+        <strong>
+            ♻ SmartClean
+        </strong>
+
+        <p>
+            Smart Garbage Management System
+        </p>
+
+    </div>
+
+
+    <div>
+        © 2026 SmartClean · Team 4
+    </div>
+
+</footer>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    const editBtn =
+        document.getElementById("adminEditBtn");
+
+
+    if (!editBtn) {
+        return;
+    }
+
+
+    editBtn.addEventListener("click", async function () {
+
+
+        const currentName =
+            {{ user.name|tojson }};
+
+
+        const currentPhone =
+            {{ (user.phone or "")|tojson }};
+
+
+        const currentEmail =
+            {{ user.email|tojson }};
+
+
+        const name = prompt(
+            "Enter administrator name:",
+            currentName
+        );
+
+
+        if (name === null) {
+            return;
+        }
+
+
+        const trimmedName =
+            name.trim();
+
+
+        if (!trimmedName) {
+
+            alert(
+                "Name cannot be empty."
+            );
+
+            return;
+
+        }
+
+
+        const phone = prompt(
+            "Enter phone number:",
+            currentPhone
+        );
+
+
+        if (phone === null) {
+            return;
+        }
+
+
+        const trimmedPhone =
+            phone.trim();
+
+
+        const email = prompt(
+            "Enter email address:",
+            currentEmail
+        );
+
+
+        if (email === null) {
+            return;
+        }
+
+
+        const trimmedEmail =
+            email.trim();
+
+
+        if (!trimmedEmail) {
+
+            alert(
+                "Email cannot be empty."
+            );
+
+            return;
+
+        }
+
+
+        const payload = {
+
+            name: trimmedName,
+
+            phone: trimmedPhone,
+
+            email: trimmedEmail
+
+        };
+
+
+        try {
+
+
+            const response = await fetch(
+                "/api/profile/update",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(payload)
+                }
+            );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok ||
+                !data.success) {
+
+                alert(
+                    data.message ||
+                    "Profile update failed."
+                );
+
+                return;
+
+            }
+
+
+            alert(
+                "Profile updated successfully!"
+            );
+
+
+            window.location.reload();
+
+        }
+
+
+        catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Unable to update profile. Please try again."
+            );
+
+        }
+
+    });
+
+
+    const logoutButton =
+        document.getElementById("logoutButton");
+
+
+    if (logoutButton) {
+
+        logoutButton.addEventListener(
+            "click",
+            function () {
+
+                window.location.href =
+                    "/admin-logout";
+
+            }
+        );
+
+    }
+
+});
+
+</script>
+
+</body>
+
+</html>
